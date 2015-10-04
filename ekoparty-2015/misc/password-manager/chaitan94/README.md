@@ -4,9 +4,9 @@
 [](tools=john)
 [](techniques=bruteforce-attack)
 
-We're given a Password Safe V3 database and a hint: [a-zA-Z0-9]{0,4}. So, time to use john and crack it open!
+We're given a [Password Safe V3 database](../mypasswords) and a hint: [a-zA-Z0-9]{0,4}. So, time to use [john](http://www.openwall.com/john/) and crack it open!
 
-Let's run pwsafe2john on it and get a hash first, so that john can crack the password from the produced hash.
+Let's run [pwsafe2john](https://github.com/piyushcse29/john-the-ripper/blob/master/src/pwsafe2john.c) on it and get a hash first, so that john can crack the password from the produced hash.
 
 ```bash
 $ pwsafe2john mypasswords > hash.txt
@@ -37,12 +37,12 @@ rec(0, [])
 After running the above code, our wordlist will be generated (roughly 72 MB :P). Now, we just have to give this to john, and it is going to crack the password for us.
 
 ```bash
-$ john -w=wordlist password.txt
+$ john -w=wordlist hash.txt
 ```
 
 Now let it run for a few minutes.. and we see that john cracked it: 'Ek0'
 
-Now installed pwsafe software, and opened the given database with the password 'Ek0'
+Now installed [pwsafe software](http://pwsafe.info/), and opened the given database with the password 'Ek0'
 
 Aaand there's our flag:
 > EKO{password\_managers\_rulez}
