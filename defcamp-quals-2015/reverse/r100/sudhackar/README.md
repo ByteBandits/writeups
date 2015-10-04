@@ -57,8 +57,10 @@ int check(char *input)
 }
 ```
 It is checking our input against the values in the fashion given above. The only effective chars we need 
+
 > Dpef`Ubmlfst 
-our password should be 1 less than each of chars.
+
+Our password should be 1 less than each of chars.
 ```bash
 $ python -c "print (''.join(chr(ord(i)-1) for i in 'Dpef\`Ubmlfst'))"
 Code_Talkers
