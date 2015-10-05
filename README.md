@@ -1,6 +1,6 @@
 # writeups
 
-Writeups for CTFs by the team ByteBandits
+Writeups for CTFs by the team [ByteBandits](https://ctftime.org/team/13691)
 
 All writeups are organized in the pattern:
 
