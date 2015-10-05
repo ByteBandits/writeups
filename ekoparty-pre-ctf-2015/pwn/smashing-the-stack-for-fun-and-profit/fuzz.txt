@@ -1,0 +1,26 @@
+[+] Started program './xpl'
+375 Interesting data loaded at 0x7ffcd0fa9f00
+
+375 375
+[+] Started program './xpl'
+376 Interesting data loaded at 0x7ffe2a9b6710
+
+376 Your username? *** stack smashing detected ***: AAAA
+
+[+] Started program './xpl'
+377 Interesting data loaded at 0x7ffd7de988a0
+
+377 377
+[+] Started program './xpl'
+378 Interesting data loaded at 0x7ffc78594e30
+
+378 378
+[+] Started program './xpl'
+379 Interesting data loaded at 0x7ffd153deb20
+
+379 379
+[*] Program './xpl' stopped with exit code -11
+[*] Program './xpl' stopped with exit code -11
+[*] Program './xpl' stopped with exit code -11
+[*] Program './xpl' stopped with exit code -6
+[*] Program './xpl' stopped with exit code -11
