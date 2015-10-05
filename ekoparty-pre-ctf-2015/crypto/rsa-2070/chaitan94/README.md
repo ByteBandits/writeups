@@ -1,6 +1,10 @@
 [](ctf=ekoparty-2015)
 [](type=crypto)
 [](tags=rsa)
+[](tools=factordb,rsatool,openssl,pycrypto)
+[](techniques=rsa)
+
+# RSA-2070 (crypto-100)
 
 We have a [public key](../public.key), let's get the modulus (n) and exponent (e)
 

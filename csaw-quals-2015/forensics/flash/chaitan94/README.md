@@ -1,6 +1,8 @@
 [](ctf=csaw-quals-2015)
 [](type=forensics)
 [](tags=)
+[](tools=)
+[](techniques=)
 
 # Flash (forensics-100)
 

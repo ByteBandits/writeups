@@ -4,6 +4,8 @@
 [](tools=john)
 [](techniques=bruteforce-attack)
 
+# Password Manager (misc-100)
+
 We're given a [Password Safe V3 database](../mypasswords) and a hint: [a-zA-Z0-9]{0,4}. So, time to use [john](http://www.openwall.com/john/) and crack it open!
 
 Let's run [pwsafe2john](https://github.com/piyushcse29/john-the-ripper/blob/master/src/pwsafe2john.c) on it and get a hash first, so that john can crack the password from the produced hash.

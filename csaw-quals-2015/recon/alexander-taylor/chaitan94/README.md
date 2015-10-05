@@ -1,8 +1,10 @@
 [](ctf=csaw-quals-2015)
 [](type=recon)
 [](tags=googling)
+[](tools=)
+[](techniques=)
 
-# Alexander Taylor
+# Alexander Taylor (recon-100)
 
 This question has a series of small tasks.
 
