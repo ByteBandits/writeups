@@ -1,5 +1,5 @@
 [](ctf=defcamp-quals-2015)
-[](type=exploit)
+[](type=reverse)
 [](tags=shift-cipher)
 
 We are given a [binary](../r100.bin).
