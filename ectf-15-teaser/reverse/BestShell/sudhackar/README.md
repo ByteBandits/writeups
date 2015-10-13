@@ -90,7 +90,8 @@ Seems like starting of flag :p
 Stepping though we find similar strings in the flow.
 
 
-```RAX: 0x4044d3 ("fOaFIcEPA*usHwivkh$Jl)41BTWeQdK!CpRt87y6zmDZrxU@YgL&{}")
+```
+RAX: 0x4044d3 ("fOaFIcEPA*usHwivkh$Jl)41BTWeQdK!CpRt87y6zmDZrxU@YgL&{}")
 RAX: 0x66 ('f')
 RAX: 0x4044e7 ("l)41BTWeQdK!CpRt87y6zmDZrxU@YgL&{}")
 RAX: 0x6c ('l')
