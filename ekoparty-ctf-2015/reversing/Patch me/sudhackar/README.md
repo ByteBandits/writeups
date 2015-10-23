@@ -15,7 +15,7 @@ SecureImageViewer.exe: PE32 executable (GUI) Intel 80386 Mono/.Net assembly, for
 secureimage.xml:       XML document text
 ```
 
-.Net assembly can be very easy decompiled. I use [Telerik JustDecompile](http://www.telerik.com/products/decompiler.aspx) to decompile the code. Here is the code that does the main job od decoding the xml to an image.
+.Net assembly can be very easy decompiled. I use [Telerik JustDecompile](http://www.telerik.com/products/decompiler.aspx) to decompile the code. Here is the code that does the main job of decoding the xml to an image.
 
 
 ```cs
@@ -58,7 +58,9 @@ protected void open(object sender, EventArgs e)
 
 The algorithm is easier to implement in python than to patch the binary xD.
 The xml provided here fails the check 
-```for (int i = 0; i < 100000; i++)
+
+```
+for (int i = 0; i < 100000; i++)
         {
             num1 = num1 + numArray[i];
         }
