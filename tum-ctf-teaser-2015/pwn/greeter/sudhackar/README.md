@@ -1,4 +1,3 @@
-hxp{f0rm4t_sTr1ngs_r0ck}
 [](ctf=tum-ctf-teaser-2015)
 [](type=pwn)
 [](tags=format-string)
