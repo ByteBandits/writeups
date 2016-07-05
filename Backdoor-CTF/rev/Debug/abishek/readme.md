@@ -8,9 +8,7 @@ When the given binary was analysed it was found to be a 32-bit,stripped file.
 hulkbuster@Jarvis:~/Downloads$ file debug32
 debug32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=46b87dea3b50c74ec8cde885ccc9a4d9e5e260f3, stripped
 ```
-Opening the file with IDA,Analyxing the code flow, it id=s found that there exists a funtion that "prints flag".
-
-![bump](files/ida.png)
+Opening the file with IDA,Analyxing the code flow, it is found that there exists a funtion that "prints flag".
 
 Now setting a random break point at an address then changing the pointer EIP to the above function's address prints the flag.
 
