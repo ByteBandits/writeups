@@ -1,0 +1,15 @@
+set $total=256
+set $i = 0
+while($i<$total)
+ b *0x8048689
+ b *0x80485ba
+ b *0x8048688
+ run lol
+ continue
+ set $i = $i + 1
+ set * (char*)($ebp-0xc)=$i
+ continue
+ print $i, $i
+ x/256xb $esp+32
+ stop
+end
