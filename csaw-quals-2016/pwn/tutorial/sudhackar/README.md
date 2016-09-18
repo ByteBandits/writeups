@@ -12,3 +12,5 @@
 
 > Leak canary by overwriting its NULL byte
 > ROP your way out (just dup2() STDIN to the socket)
+
+[![asciicast](https://asciinema.org/a/86029.png)](https://asciinema.org/a/86029)
