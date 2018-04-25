@@ -58,7 +58,7 @@ The flag is: blaze{a0ddb69ede14231576e7f0241623723385814f32}
 
 gdb helper
 
-```
+```python
 import gdb
 
 gdb.execute('file ../96667aaad70646abc06a8b44b1016e94e3897dd5a95dff21b6e7a9628a823d06')

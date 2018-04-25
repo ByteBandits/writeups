@@ -71,15 +71,16 @@ The next thought I had was to restart the execution of main such that we can byp
 
 ![exp](exp.png)
 
-As I noticed that `memset` operation is done on `0x400699`,once the `seen` table has initialized we can skip doing it again in the second run. Jumping to anywhere after the memset operation should work. If we are able to corrupt the 256 byte count table in a way that unique count calculated is in our control then that would let us run arbirary code in the next run. So in the first run we can execute 'push' to setup the stack in such a way that seen[256] is overflowed back to < 7 in the next run.
+As I noticed that `memset` operation is done on `0x400699`, once the `seen` table has initialized we can skip doing it again in the second run. Jumping to anywhere after the memset operation should work. If we are able to corrupt the 256 byte count table in a way that unique count calculated is in our control then that would let us run arbirary code in the next run. So in the first run we can execute 'push' to setup the stack in such a way that seen[256] is overflowed back to < 7 in the next run.
 
 Here's how I did it in 7 unique bytes:
-    + `pop` the saved rip from the stack to a register(rbx) (+1 unique byte)
-    + `dec` the 32bit variant of that register to make it 0x4006d2  (+2 unique bytes)
-    + spray the stack by `push`ing the register to setup an already filled `seen`  (+1 unique bytes)
-    + `inc rsp` to align `seen[256]` with 0xd2. will overflow this in the next run  (+2 unique bytes)
-    + `ret` to get input again to the same page  (+1 unique bytes)
-    + input a shellcode such that seen[256] is overflowed back to 0
+
+    * `pop` the saved rip from the stack to a register(rbx) (+1 unique byte)
+    * `dec` the 32bit variant of that register to make it 0x4006d2  (+2 unique bytes)
+    * spray the stack by `push`ing the register to setup an already filled `seen`  (+1 unique bytes)
+    * `inc rsp` to align `seen[256]` with 0xd2. will overflow this in the next run  (+2 unique bytes)
+    * `ret` to get input again to the same page  (+1 unique bytes)
+    * input a shellcode such that seen[256] is overflowed back to 0
 
 
 ```
