@@ -75,12 +75,12 @@ As I noticed that `memset` operation is done on `0x400699`, once the `seen` tabl
 
 Here's how I did it in 7 unique bytes:
 
-    * `pop` the saved rip from the stack to a register(rbx) (+1 unique byte)
-    * `dec` the 32bit variant of that register to make it 0x4006d2  (+2 unique bytes)
-    * spray the stack by `push`ing the register to setup an already filled `seen`  (+1 unique bytes)
-    * `inc rsp` to align `seen[256]` with 0xd2. will overflow this in the next run  (+2 unique bytes)
-    * `ret` to get input again to the same page  (+1 unique bytes)
-    * input a shellcode such that seen[256] is overflowed back to 0
+* `pop` the saved rip from the stack to a register(rbx) (+1 unique byte)
+* `dec` the 32bit variant of that register to make it 0x4006d2  (+2 unique bytes)
+* spray the stack by `push`ing the register to setup an already filled `seen`  (+1 unique bytes)
+* `inc rsp` to align `seen[256]` with 0xd2. will overflow this in the next run  (+2 unique bytes)
+* `ret` to get input again to the same page  (+1 unique bytes)
+* input a shellcode such that seen[256] is overflowed back to 0
 
 
 ```

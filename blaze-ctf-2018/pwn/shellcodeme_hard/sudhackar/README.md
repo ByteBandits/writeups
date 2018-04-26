@@ -35,4 +35,4 @@ s.close()
 ```
 
  The random values from the context seldom had 0s. So I sprayed the stack with a register to make `seen` for every character > 0.
- Then using the technique from [here](../../shellcode/sudhackar/README.md) to gain code execution.
+ Then using the technique from [here](../../shellcodeme/sudhackar/README.md) to gain code execution.
