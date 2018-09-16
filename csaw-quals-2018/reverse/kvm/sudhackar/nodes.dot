@@ -1,0 +1,135 @@
+strict digraph "" {
+	graph [ordering="out"];
+	"1300"[label="1300\lval : ff\lr : 12e0\ll : 3b30"]
+	"1300" -> "12e0" 
+	"12e0"[label="12e0\lval : ff\lr : c60\ll : 12c0"]
+	"12e0" -> "c60" 
+	"c60"[label="c60\lval : ff\lr : ae0\ll : c40"]
+	"c60" -> "ae0" 
+	"ae0"[label="ae0\lval : 0\l"]
+	"c60" -> "c40" 
+	"c40"[label="c40\lval : ff\lr : bc0\ll : c20"]
+	"c40" -> "bc0" 
+	"bc0"[label="bc0\lval : ff\lr : b80\ll : ba0"]
+	"bc0" -> "b80" 
+	"b80"[label="b80\lval : ff\lr : b00\ll : b60"]
+	"b80" -> "b00" 
+	"b00"[label="b00\lval : w\l"]
+	"b80" -> "b60" 
+	"b60"[label="b60\lval : ff\lr : b20\ll : b40"]
+	"b60" -> "b20" 
+	"b20"[label="b20\lval : }\l"]
+	"b60" -> "b40" 
+	"b40"[label="b40\lval : 5\l"]
+	"bc0" -> "ba0" 
+	"ba0"[label="ba0\lval : o\l"]
+	"c40" -> "c20" 
+	"c20"[label="c20\lval : ff\lr : be0\ll : c00"]
+	"c20" -> "be0" 
+	"be0"[label="be0\lval : 1\l"]
+	"c20" -> "c00" 
+	"c00"[label="c00\lval : t\l"]
+	"12e0" -> "12c0" 
+	"12c0"[label="12c0\lval : ff\lr : fc0\ll : 12a0"]
+	"12c0" -> "fc0" 
+	"fc0"[label="fc0\lval : ff\lr : d40\ll : fa0"]
+	"fc0" -> "d40" 
+	"d40"[label="d40\lval : ff\lr : cc0\ll : d20"]
+	"d40" -> "cc0" 
+	"cc0"[label="cc0\lval : ff\lr : c80\ll : ca0"]
+	"cc0" -> "c80" 
+	"c80"[label="c80\lval : 3\l"]
+	"cc0" -> "ca0" 
+	"ca0"[label="ca0\lval : 7\l"]
+	"d40" -> "d20" 
+	"d20"[label="d20\lval : ff\lr : ce0\ll : d00"]
+	"d20" -> "ce0" 
+	"ce0"[label="ce0\lval : f\l"]
+	"d20" -> "d00" 
+	"d00"[label="d00\lval : i\l"]
+	"fc0" -> "fa0" 
+	"fa0"[label="fa0\lval : ff\lr : e20\ll : f80"]
+	"fa0" -> "e20" 
+	"e20"[label="e20\lval : ff\lr : da0\ll : e00"]
+	"e20" -> "da0" 
+	"da0"[label="da0\lval : ff\lr : d60\ll : d80"]
+	"da0" -> "d60" 
+	"d60"[label="d60\lval : ?\l"]
+	"da0" -> "d80" 
+	"d80"[label="d80\lval : c\l"]
+	"e20" -> "e00" 
+	"e00"[label="e00\lval : ff\lr : dc0\ll : de0"]
+	"e00" -> "dc0" 
+	"dc0"[label="dc0\lval : b\l"]
+	"e00" -> "de0" 
+	"de0"[label="de0\lval : d\l"]
+	"fa0" -> "f80" 
+	"f80"[label="f80\lval : ff\lr : e80\ll : f60"]
+	"f80" -> "e80" 
+	"e80"[label="e80\lval : ff\lr : e40\ll : e60"]
+	"e80" -> "e40" 
+	"e40"[label="e40\lval : g\l"]
+	"e80" -> "e60" 
+	"e60"[label="e60\lval : r\l"]
+	"f80" -> "f60" 
+	"f60"[label="f60\lval : ff\lr : ee0\ll : f40"]
+	"f60" -> "ee0" 
+	"ee0"[label="ee0\lval : ff\lr : ea0\ll : ec0"]
+	"ee0" -> "ea0" 
+	"ea0"[label="ea0\lval : 10\l"]
+	"ee0" -> "ec0" 
+	"ec0"[label="ec0\lval : .\l"]
+	"f60" -> "f40" 
+	"f40"[label="f40\lval : ff\lr : f00\ll : f20"]
+	"f40" -> "f00" 
+	"f00"[label="f00\lval : 2\l"]
+	"f40" -> "f20" 
+	"f20"[label="f20\lval : e\l"]
+	"12c0" -> "12a0" 
+	"12a0"[label="12a0\lval : ff\lr : 1160\ll : 1280"]
+	"12a0" -> "1160" 
+	"1160"[label="1160\lval : ff\lr : 10e0\ll : 1140"]
+	"1160" -> "10e0" 
+	"10e0"[label="10e0\lval : ff\lr : 10a0\ll : 10c0"]
+	"10e0" -> "10a0" 
+	"10a0"[label="10a0\lval : ff\lr : 1020\ll : 1080"]
+	"10a0" -> "1020" 
+	"1020"[label="1020\lval : ff\lr : fe0\ll : 1000"]
+	"1020" -> "fe0" 
+	"fe0"[label="fe0\lval : m\l"]
+	"1020" -> "1000" 
+	"1000"[label="1000\lval : n\l"]
+	"10a0" -> "1080" 
+	"1080"[label="1080\lval : ff\lr : 1040\ll : 1060"]
+	"1080" -> "1040" 
+	"1040"[label="1040\lval : x\l"]
+	"1080" -> "1060" 
+	"1060"[label="1060\lval : {\l"]
+	"10e0" -> "10c0" 
+	"10c0"[label="10c0\lval : a\l"]
+	"1160" -> "1140" 
+	"1140"[label="1140\lval : ff\lr : 1100\ll : 1120"]
+	"1140" -> "1100" 
+	"1100"[label="1100\lval : s\l"]
+	"1140" -> "1120" 
+	"1120"[label="1120\lval : 6\l"]
+	"12a0" -> "1280" 
+	"1280"[label="1280\lval : ff\lr : 1240\ll : 1260"]
+	"1280" -> "1240" 
+	"1240"[label="1240\lval : ff\lr : 11c0\ll : 1220"]
+	"1240" -> "11c0" 
+	"11c0"[label="11c0\lval : ff\lr : 1180\ll : 11a0"]
+	"11c0" -> "1180" 
+	"1180"[label="1180\lval : 4\l"]
+	"11c0" -> "11a0" 
+	"11a0"[label="11a0\lval : \l"]
+	"1240" -> "1220" 
+	"1220"[label="1220\lval : ff\lr : 11e0\ll : 1200"]
+	"1220" -> "11e0" 
+	"11e0"[label="11e0\lval : l\l"]
+	"1220" -> "1200" 
+	"1200"[label="1200\lval : u\l"]
+	"1280" -> "1260" 
+	"1260"[label="1260\lval :  \l"]
+	"1300" -> "3b30" 
+}

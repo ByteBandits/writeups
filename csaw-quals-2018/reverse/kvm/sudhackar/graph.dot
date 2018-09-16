@@ -1,0 +1,38 @@
+digraph code {
+	graph [bgcolor=azure fontsize=8 fontname="Courier" splines="ortho"];
+	node [fillcolor=gray style=filled shape=box];
+	edge [arrowhead="normal"];
+	"0x202354" -> "0x2024a0";
+	"0x2024a0" -> "0x202574";
+	"0x2024a0" -> "0x2024bb";
+	"0x202574" -> "0x2025a9";
+	"0x202574" -> "0x202596";
+	// "0x2024bb" -> "0x202354";
+	"0x2024bb" -> "0x2024fd";
+	"0x2024bb" -> "0x2024ea";
+	// "0x2024fd" -> "0x202354";
+	"0x2024fd" -> "0x202542";
+	"0x2024fd" -> "0x20252c";
+	"0x202542" -> "0x2025c8";
+	"0x20252c" -> "0x202555";
+	"0x202555" -> "0x202561";
+	"0x202561" -> "0x2025c8";
+	"0x2024ea" -> "0x202561";
+	"0x2025a9" -> "0x2025b5";
+	"0x202596" -> "0x2025c8";
+	"0x2025b5" -> "0x2025c8";
+	"0x202354"[URL="main/0x2024ea",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label=".payload:0000000000202354                 push    rbp\l.payload:0000000000202355                 mov     rbp, rsp\l.payload:0000000000202358                 sub     rsp, 60h\l.payload:000000000020235C                 mov     al, dil         ; current_char\l.payload:000000000020235F                 mov     [rbp+var_9], al\l.payload:0000000000202362                 mov     [rbp+var_18], rsi ; 0x1300\l.payload:0000000000202366                 mov     rsi, [rbp+var_18]\l.payload:000000000020236A                 movsx   edi, byte ptr [rsi]\l.payload:000000000020236D                 mov     [rbp+var_4], edi\l.payload:0000000000202370                 mov     eax, 3493310Dh\l.payload:0000000000202375                 hlt\l"]
+	"0x2024ea"[URL="main/0x2024ea",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x54a15b03|\l.payload:00000000002024EA                 xor     edi, edi\l.payload:00000000002024EC                 call    some_fn\l.payload:00000000002024F1                 mov     eax, 9D1FE433h\l.payload:00000000002024F6                 hlt\l"]
+	"0x202596"[URL="main/0x202596",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x8f6e2804|\l.payload:0000000000202596                 mov     dword ptr [rbp-8], 1\l.payload:000000000020259D                 mov     eax, 0C50B6060h\l.payload:00000000002025A2                 hlt\l"]
+	"0x2024fd"[URL="main/0x2024fd",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x8aeef509|\l.payload:00000000002024FD                 mov     al, [rbp-9]\l.payload:0000000000202500                 mov     rcx, [rbp-18h]\l.payload:0000000000202504                 mov     rsi, [rcx+10h]\l.payload:0000000000202508                 movsx   edi, al\l.payload:000000000020250B                 call    chk_halt_start\l.payload:0000000000202510 ; ---------------------------------------------------------------------------\l.payload:0000000000202510                 mov     edi, 0FC2FF49Fh\l.payload:0000000000202515                 mov     edx, 64D8A529h\l.payload:000000000020251A                 mov     [rbp-1Ch], eax\l.payload:000000000020251D                 cmp     dword ptr [rbp-1Ch], 1\l.payload:0000000000202521                 cmovz   edi, edx\l.payload:0000000000202524                 mov     eax, edi\l.payload:0000000000202526                 hlt\l"]
+	"0x2024a0"[URL="main/0x2024a0",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x3493310d|\l.payload:00000000002024A0                 mov     eax, 968630D0h\l.payload:00000000002024A5                 mov     ecx, 5DE72DDh\l.payload:00000000002024AA                 mov     edx, [rbp-4]\l.payload:00000000002024AD                 cmp     edx, 0FFFFFFFFh\l.payload:00000000002024B0                 cmovz   eax, ecx\l.payload:00000000002024B3                 mov     eax, eax\l.payload:00000000002024B5                 hlt\l"]
+	"0x202555"[URL="main/0x202555",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x59c33d0f|\l.payload:0000000000202555                 mov     eax, 9D1FE433h\l.payload:000000000020255A                 hlt\l"]
+	"0x202574"[URL="main/0x202574",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x968630d0|\l.payload:0000000000202574                 mov     eax, 0EF5BDD13h\l.payload:0000000000202579                 mov     ecx, 8F6E2804h\l.payload:000000000020257E                 mov     rdx, [rbp-18h]\l.payload:0000000000202582                 movsx   esi, byte ptr [rdx]\l.payload:0000000000202585                 movsx   edi, byte ptr [rbp-9]\l.payload:0000000000202589                 cmp     esi, edi\l.payload:000000000020258B                 cmovz   eax, ecx\l.payload:000000000020258E                 mov     eax, eax\l.payload:0000000000202590                 hlt\l"]
+	"0x2025a9"[URL="main/0x2025a9",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0xef5bdd13|\l.payload:00000000002025A9                 mov     eax, 5F291A64h\l.payload:00000000002025AE                 hlt\l"]
+	"0x2024bb"[URL="main/0x2024bb",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x05de72dd|\l.payload:00000000002024BB                 mov     al, [rbp-9]\l.payload:00000000002024BE                 mov     rcx, [rbp-18h]\l.payload:00000000002024C2                 mov     rsi, [rcx+8]\l.payload:00000000002024C6                 movsx   edi, al\l.payload:00000000002024C9                 call    chk_halt_start\l.payload:00000000002024CE ; ---------------------------------------------------------------------------\l.payload:00000000002024CE                 mov     edi, 8AEEF509h\l.payload:00000000002024D3                 mov     edx, 54A15B03h\l.payload:00000000002024D8                 mov     [rbp-1Ch], eax\l.payload:00000000002024DB                 cmp     dword ptr [rbp-1Ch], 1\l.payload:00000000002024DF                 cmovz   edi, edx\l.payload:00000000002024E2                 mov     eax, edi\l.payload:00000000002024E4                 hlt\l"]
+	"0x202542"[URL="main/0x202542",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0xfc2ff49f|\l.payload:0000000000202542                 mov     dword ptr [rbp-8], 0\l.payload:0000000000202549                 mov     eax, 0C50B6060h\l.payload:000000000020254E                 hlt\l"]
+	"0x2025c8"[URL="main/0x2025c8",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0xc50b6060|\l.payload:00000000002025C8                 mov     eax, [rbp-8]\l.payload:00000000002025CB                 add     rsp, 60h\l.payload:00000000002025CF                 pop     rbp\l.payload:00000000002025D0                 retn\l"]
+	"0x2025b5"[URL="main/0x2025b5",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x5f291a64|\l.payload:00000000002025B5                 mov     dword ptr [rbp-8], 0\l.payload:00000000002025BC                 mov     eax, 0C50B6060h\l.payload:00000000002025C1                 hlt\l"]
+	"0x20252c"[URL="main/0x20252c",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x64d8a529|\l.payload:000000000020252C                 mov     edi, 1\l.payload:0000000000202531                 call    some_fn\l.payload:0000000000202536                 mov     eax, 59C33D0Fh\l.payload:000000000020253B                 hlt\l"]
+	"0x202561"[URL="main/0x202561",fillcolor="palegreen",color="#7f7f7f", fontname="Courier",label="|0x9d1fe433|\l.payload:0000000000202561                 mov     dword ptr [rbp-8], 1\l.payload:0000000000202568                 mov     eax, 0C50B6060h\l.payload:000000000020256D                 hlt"]
+}
