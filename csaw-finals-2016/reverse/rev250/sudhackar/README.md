@@ -111,7 +111,7 @@ sub_8048513() {
 }
 ```
 
-The logic is pretty straight forward. main() checks if the flag is in argv[1] and then checks the constraints on it. sub_8048513() checks if the flag is of format flag{%s} and then sets *0x804a030=0x35E4EEBF.
+The logic is pretty straight forward. main() checks if the flag is in argv[1] and then checks the constraints on it. sub_8048513() checks if the flag is of format flag{ %s} and then sets *0x804a030=0x35E4EEBF.
 
 Its very easy to figure out the constraints here. 0x804a030 stores a xor checksum which should be equal to 0xdeadbea7 for the correct flag.
 
@@ -154,7 +154,7 @@ for i in xrange(6):
     c=modl[obj].as_long()
     res += hex(c)[2:].decode('hex')[::-1]
 
-print("Result: flag{%s}"%res)
+print("Result: flag{ %s}"%res)
 ```
 
 gives us flag{alg3bra_1z_sti11_fun_y0!} in no time.
