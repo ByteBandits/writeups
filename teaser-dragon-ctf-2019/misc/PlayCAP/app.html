@@ -1,0 +1,194 @@
+<html>
+  <head>
+    <title>Flag Entry Utility For Gamepad Owners</title>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+    <style>
+@import url('https://fonts.googleapis.com/css?family=Almendra|MedievalSharp');
+
+div.key {
+  position: absolute;
+  width: 8%;
+  height: 8%;
+  border: 1px solid black;
+  display: table;
+  background-color: #008113;
+}
+
+div.key_text {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-family: 'Almendra', serif;
+  font-size: 3em;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #440, 1px -1px 0 #440, -1px 1px 0 #440, 1px 1px 0 #440;
+  color: #ffe85f;
+}
+
+div.screen_keyboard {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+div.flag_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+div.flag_text {
+  position: absolute;
+  width: 100%;
+  left: 5%;
+  top: 2%;
+  font-family: 'Almendra', serif;
+  font-size: 3em;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #440, 1px -1px 0 #440, -1px 1px 0 #440, 1px 1px 0 #440;
+  color: #ff3737;
+}
+
+span#flag {
+  color: #ffe85f;
+}
+    </style>
+  </head>
+  <body>
+    <div class="flag_container">
+      <div class="flag_text">
+        Flag: <span id="flag"></span>
+      </div>
+    </div>
+    <div id="screen_keyboard"></div>
+  </body>
+  <script>
+$(function() {
+  const KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,-=:;{}";
+  let screen_keyboard = $("#screen_keyboard");
+
+  for (let i = 0; i < KEYS.length; i++) {
+    let x = i % 10;
+    let y = (i / 10)|0;
+    let id = "key_"+x+"_"+y;
+
+    let el = $("<div/>", {
+      id: id,
+      "class": "key",
+      html: '<div class="key_text">' + KEYS[i] + '</div>',
+      css: {
+        left: "" + (5 + x * 9) + "%",
+        top: "" + (15 + y * 11) + "%"
+      },
+    });
+
+    el.attr('data-idx', i);
+    el.attr('data-key', KEYS[i]);
+
+    screen_keyboard.append(el);
+  }
+
+  window.gamepad_pos_x = 0;
+  window.gamepad_pos_y = 0;
+  let now = Date.now();
+  window.gamepad_buttons_low_level = {
+    left: [false, now],
+    right: [false, now],
+    up: [false, now],
+    down: [false, now],
+    reset: [false, now],
+    select: [false, now]
+  };
+
+  handleButtons = function(action, state) {
+    if (!state) {
+      return;
+    }
+
+    let last_id = "#key_"+window.gamepad_pos_x+"_"+window.gamepad_pos_y;
+    $(last_id).css('background-color', '');
+
+    if (action === 'right') {
+      window.gamepad_pos_x = (window.gamepad_pos_x + 1) % 10;
+    }
+
+    if (action === 'left') {
+      window.gamepad_pos_x = (window.gamepad_pos_x - 1 + 10) % 10;
+    }
+
+    if (action === 'up') {
+      window.gamepad_pos_y = (window.gamepad_pos_y - 1 + 6) % 6;
+    }
+
+    if (action === 'down') {
+      window.gamepad_pos_y = (window.gamepad_pos_y + 1) % 6;
+    }
+
+    if (action === 'reset') {
+      window.gamepad_pos_x = 0;
+      window.gamepad_pos_y = 0;
+    }
+
+    let id = "#key_"+window.gamepad_pos_x+"_"+window.gamepad_pos_y;
+    $(id).css('background-color', '#ff3737');
+
+    if (action === 'select') {
+      let text = $('#flag').text();
+      text += $(id).attr('data-key');
+      $('#flag').text(text);
+    }
+
+    //console.log(action, window.gamepad_pos_x, window.gamepad_pos_y);
+  };
+
+  handleButtons('reset', true);
+
+  checkChange = function(buttons, action, button_id) {
+    let state = buttons[button_id].pressed;
+    let ll = window.gamepad_buttons_low_level[action];
+    if (ll[0] == state) {
+      return;  // No change.
+    }
+
+    let now = Date.now();
+    let diff = now - ll[1];
+    if (diff < 50) {
+      return;  // Debounce.
+    }
+
+    ll[0] = state;
+    ll[1] = now;
+    handleButtons(action, state);
+  }
+
+  window.gamepad_poll = setInterval(function() {
+    let pads = navigator.getGamepads();
+    for (let i = 0; i < pads.length; i++) {
+      if (pads[i] === null) {
+        continue;
+      }
+
+      let pad = pads[i];
+      if (pad.buttons.length < 18) {
+        continue;
+      }
+
+      checkChange(pad.buttons, 'left', 14);  // Direction buttons.
+      checkChange(pad.buttons, 'right', 15);
+      checkChange(pad.buttons, 'up', 12);
+      checkChange(pad.buttons, 'down', 13);
+      checkChange(pad.buttons, 'reset', 3);  // X
+      checkChange(pad.buttons, 'select', 1);  // A
+    }
+  }, 50);
+
+});
+  </script>
+</html>
