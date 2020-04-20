@@ -33,6 +33,7 @@ Let's get a broad overview of what the services do:
 - Then there's the `email` service:
     - It's quite simple, listen for message on the rabbitmq queue and send email. But there's one red herring:
     ![](https://i.imgur.com/MR3MrIp.png)
+    
     There's no check to validate message content. And it's directly passed to the `sendMail` function. This could allow us to mess with it if we could somehow send custom messages to the queue.
 
 
@@ -42,18 +43,20 @@ Let's get a broad overview of what the services do:
 Earlier, we noticed that only `api`, `email` and `server` services have `/flag.txt`. So let's look for ways to read it.
 
 - `api` service
+
 As we noticed earlier, there's a possible SSRF. But only `http:`, `https:` and `ftp:` protocols are allowed.
 Furthermore, the fetched content is checked for PNG headers. I couldn't find any way to read `/flag.txt` from this service alone.
 
 - `server` is just a simple express server to serve files and proxy the api. There's no way to read files.
 
 - `email` service
+
 Now, this one's interesting. Let's assume that we can control the parameters sent to `sendMail` function. Is there any way to read files?
 Let's take a look at Nodemailer docs and find out what all options are available. 
 https://nodemailer.com/message/attachments/
 We can just pass the file path to send it as an attachment. Interesting! This could be a way to read `/flag.txt`
 
-**If we could somehow send arbitrary messages to the `email` queue, we can controls what goes into the `sendMail` and thus, send `flag.txt` as an attachment.**
+**If we could somehow send arbitrary messages to the `email` queue, we can control what goes into the `sendMail` and thus, send `flag.txt` as an attachment.**
 
 I decided to go with this approach and started finding ways to send custom messages to the `rabbitmq` queue.
 
@@ -87,17 +90,17 @@ Looking through the `api` service, there's one more protocol supported, `ftp:`
 
 I had overlooked this part. Here's a crazy idea: what if we could do something similar to request splitting. FTP is also a text-based protocol after all.
 
-After going through `node-ftp`'s source, I realized that there are no checks on username/password. We should be able to send something like `user\r\nRANDOM_FTP_COMMAND`.
+After going through `node-ftp`'s source, I realized that there are no checks on username/password. We should be able to send something like `user\r\nRANDOM_FTP_COMMAND` as username.
 
 And guess what, it worked! :fist: 
 
 We can run arbitrary FTP commands, comrades!
 
-But here's a problem, the flag is not on `ftp` service. So, we'll have to find a way to send POST request to `rabbit` using `ftp`. Sounds crazy, right?!
+Now, we'll have to find a way to send a POST request to `rabbit` using FTP. Sounds crazy, right?!
 
-Knowing nothing about the FTP protocol, I turned to my best friend, Google.
+Knowing nothing about the FTP, I turned to my best friend, Google.
 
-Here's an interesting fact about FTP protocol: there's a separate connection for data transfers. I learned that there are two ways in which this connection is created:
+Here's an interesting fact about FTP: there's a separate connection for data transfers. I learned that there are two ways in which this connection is created:
 - `Active`: The client opens a port and informs the server to make a connection to it. The `PORT` ftp command is used for this. As you might have noticed, this gets problematic due to NAT. That's why they created the passive mode.
 - `Passive`: The client requests the server (by sending `PASV`) to open a port to establish the data connection.
 
@@ -126,7 +129,7 @@ I quickly thought of an attack plan.
 ## The Attack Plan
 Here's what we are gonna do:
 - Execute arbitrary ftp commands by injecting it into the `username` field
-- upload a file containing raw POST request with the desired content
+- upload a file containing raw POST request to add a message to the `email` queue which'll send an email with `/flag.txt` as an attachment.
 - use ftp `PORT` command to send that file to the rabbitmq management server
 
 And hopefully, we'll get the flag.
@@ -210,11 +213,11 @@ The problem is that apparently, ftp closes the data connection right after sendi
 
 A quick workaround I could think of was to somehow make the data connection stay longer after sending the payload. One way to do this could be to append a lot of garbage after the payload.
 
-So:
+So, run:
 ```bash
 ubuntu@ip-172-31-3-141:~/ctf/problem$ for i in {0..1000};do cat payload_bak >> payload;done
 ```
-The send the payload again.
+Then send the payload again.
 
 And Voila! It worked! I got the flag in my email.
 
