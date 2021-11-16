@@ -132,3 +132,15 @@ Please type your input:
 431638527527572572527527223163816467611642134676813236166612477
 Well done! Please validate the input on the remote server
 ```
+
+After talking to the author and other players on discord it was seen that challenge was designed to be solved using a Knight Tour. The 8x8 board was chess board and the knight was placed at D4. Based on that I tried to use a closed Knight Tour which is like a loop and the last move takes you to the initial place again. Solution [here](https://gist.github.com/sudhackar/882e95dc79cfcb4b384b2f919b2d7ab7)
+
+So another valid input
+```sh
+[csaw] python3 /tmp/m.py
+431741658571278358241347146831658753852141356347146857835824752%
+[csaw] ./maze_public
+Please type your input:
+431741658571278358241347146831658753852141356347146857835824752
+Well done! Please validate the input on the remote server
+```
