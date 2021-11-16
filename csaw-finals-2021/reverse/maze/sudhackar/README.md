@@ -28,11 +28,11 @@ sys_exit(1);
 The logic is pretty straightforward too.
 ![node](node.png)
 
-It reads the first byte from the flag and considers it as a digit. If the digit is 1-8 range then a tuple of values is set and used to calculate a jump.
+It reads the first byte from the flag and considers it as a digit. If the digit is in 1-8 range then a tuple of values is set and used to calculate a jump.
 
 Looking at the destination of the jump we find that there are multiple copies of the same `sub_403EB6` with the same code. So the binary is basically and array of same check functions that continue jumping to each other and return if you call the same function twice.
 
-Additionally there are some dummy ret's placed on some destination jumps as well which are like an instant fail. To get the good boy message you need to call exactly all of 0x40 functions as each function increments `r15`.
+Additionally there are some dummy ret's placed on some destination jumps as well which are like an instant fail. To get the good boy message you need to call exactly all of 0x40 functions once as each function increments `r15`.
 
 ```python
 In [3]: e = ELF("maze_public")
@@ -64,7 +64,7 @@ We need to find out what jmp targets are actual functions that would be called f
 
 Now looking at this I found that there is a pattern - 8 valid functions followed by 4 rets. A total of (8+4)*12 = 96 places out of which 64 were valid.
 
-I though of this as a graph theory problem where the neighbours are valid targets. The solutions needs that we traverse each node exactly once and visit all nodes - basically a hamiltonian path.
+I thought of this as a graph theory problem where the neighbours are valid targets. The solution needs that we traverse each node exactly once and visit all nodes - basically a hamiltonian path.
 
 A dot file can be generated to load in `networkx` which already has a lot of graph theory related algorithms
 
