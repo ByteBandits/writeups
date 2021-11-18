@@ -163,7 +163,7 @@ Base on this I started analysing the vm code annotating the disassembly with com
 0x55d : r6 = r6 == r7 ; last check but what?
 ```
 
-After some moment I got a value idea of what the VM was doing. To verify my guesses I wrote a [pintool](tool.cpp) which logged some registers and some stack on each iteration of the evaluator loop
+After spending some time I got a vague idea of what the VM was doing. To verify my guesses I wrote a [pintool](tool.cpp) which logged some registers and some stack on each iteration of the evaluator loop. Here is the hook for each interation loop of the vm evaluation
 
 ```cpp
 VOID logme(ADDRINT ip, CONTEXT *ctx)
