@@ -83,6 +83,8 @@ for i in range(96):
 print("}")
 ```
 
+The [dot](a.dot) file can be rendered to ![graph](a.png)
+
 and then find the hamiltonian path with source as `sub_403EB6` which was the 51st member of the array and hence 35th valid node.
 
 ```python
