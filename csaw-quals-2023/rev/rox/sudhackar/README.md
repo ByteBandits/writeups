@@ -30,4 +30,6 @@ aN0ther_HeRRing_or_irhtH3ewiTn00 (30, '0')
 I wasted doing a sidechannel on the binary without any promising results
 
 These are the sidechannel I tried with gdb but without any luck.\
-[`some.py`](./some.py) [`else.py`](./else.py)
+[`some.py`](./some.py), [`else.py`](./else.py)
+
+flag: `aN0ther_HeRRing_or_iS_tHis_iT`
