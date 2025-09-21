@@ -14,35 +14,26 @@ The repository also includes a small [search tool](search.py), through we can we
 
 The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that indexes the markdown writeups and exposes global fuzzy search, a CTF directory minimap, and rich previews.
 
-1. (Recommended) Create a virtual environment in the repository root and install the generator dependency:
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate            # On Windows use: .\.venv\Scripts\activate
-   python -m pip install --upgrade pip
-   python -m pip install python-frontmatter
-   ```
-
-2. Install the UI dependencies:
+1. Install the UI dependencies:
 
    ```bash
    cd ui
    npm ci
    ```
 
-3. Start the local development server (this automatically regenerates the index):
+2. Start the local development server (this automatically regenerates the index via `scripts/generate_index.mjs`):
 
    ```bash
    npm run dev
    ```
 
-4. Build the production bundle:
+3. Build the production bundle:
 
    ```bash
    npm run build
    ```
 
-The generator writes `ui/public/writeups.json` and copies the markdown/attachment assets into `ui/public/writeups/` so they are available to the static site. The npm scripts automatically look for `PYTHON`, the active `VIRTUAL_ENV`, or a local `.venv` folder, so as long as you activate the environment (or create `.venv` in the repo root) the correct interpreter will be used without editing any paths.
+`npm run generate` is also available if you only need to refresh the index without starting Vite. The generator writes `ui/public/writeups.json` and copies the markdown/attachment assets into `ui/public/writeups/` so they are available to the static site.
 
 The UI mirrors the feel of [cp-algorithms](https://cp-algorithms.com/):
 

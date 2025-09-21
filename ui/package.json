@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate": "node ../scripts/run-generate.mjs",
+    "generate": "node ../scripts/generate_index.mjs",
     "dev": "npm run generate && vite",
     "build": "npm run generate && vite build",
     "preview": "vite preview"
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
+    "gray-matter": "^4.0.3",
     "vite": "^5.2.0"
   }
 }
