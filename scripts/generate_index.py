@@ -59,6 +59,8 @@ HTML_EXTS = {".html", ".htm"}
 
 LEGACY_META_PATTERN = re.compile(r"^\s*\[\]\(([^=()]+)=(.*)\)\s*$")
 LIST_FIELDS = {"tags", "files", "tools", "techniques"}
+MAX_CONTENT_CHARS = 20000
+SUMMARY_PREVIEW_CHARS = 240
 
 
 def main() -> None:
@@ -102,6 +104,8 @@ def process_markdown(md_path: Path) -> Dict[str, Any] | None:
 
     ctf, category, problem_guess = derive_metadata_from_path(md_path)
 
+    body_text = str(post.content or "")
+
     entry: Dict[str, Any] = {
         "path": rel_md_path,
         "ctf": metadata.get("ctf") or ctf,
@@ -115,6 +119,8 @@ def process_markdown(md_path: Path) -> Dict[str, Any] | None:
         "files": sanitize_string_list(normalize_list(metadata.get("files"))),
         "tools": sanitize_string_list(normalize_list(metadata.get("tools"))),
         "techniques": sanitize_string_list(normalize_list(metadata.get("techniques"))),
+        "summary": extract_summary(body_text, metadata),
+        "contentText": prepare_content_text(body_text),
     }
 
     if not entry["author"]:
@@ -134,6 +140,9 @@ def process_markdown(md_path: Path) -> Dict[str, Any] | None:
     attachments = discover_attachments(md_path)
     if attachments:
         entry["attachments"] = attachments
+
+    if not entry["summary"]:
+        entry["summary"] = entry["problem"] or rel_md_path
 
     copy_asset(md_path)
 
@@ -329,6 +338,59 @@ def copy_asset(file_path: Path) -> None:
     target_path = OUTPUT_DIR / rel_path.as_posix()
     target_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(file_path, target_path)
+
+
+def collapse_whitespace(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def truncate_text(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    truncated = text[:limit]
+    last_space = truncated.rfind(" ")
+    if last_space > limit * 0.6:
+        truncated = truncated[:last_space]
+    return truncated.rstrip() + "…"
+
+
+def prepare_content_text(body_text: str) -> str | None:
+    if not body_text:
+        return None
+    cleaned_lines = [
+        line for line in body_text.splitlines() if not LEGACY_META_PATTERN.match(line.strip())
+    ]
+    cleaned_text = "\n".join(cleaned_lines)
+    cleaned_text = re.sub(r"^\s*#+\s*", "", cleaned_text, flags=re.MULTILINE)
+    normalized = collapse_whitespace(cleaned_text)
+    if not normalized:
+        return None
+    return truncate_text(normalized, MAX_CONTENT_CHARS)
+
+
+def extract_summary(body_text: str, metadata: Dict[str, Any]) -> str | None:
+    for key in ("summary", "description"):
+        value = metadata.get(key)
+        if value:
+            return str(value)
+
+    for line in body_text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if LEGACY_META_PATTERN.match(stripped):
+            continue
+        if stripped.startswith("#"):
+            heading = stripped.lstrip("# ").strip()
+            if heading:
+                return truncate_text(heading, SUMMARY_PREVIEW_CHARS)
+            continue
+        return truncate_text(collapse_whitespace(stripped), SUMMARY_PREVIEW_CHARS)
+
+    fallback = metadata.get("problem") or metadata.get("title")
+    if fallback:
+        return str(fallback)
+    return None
 
 
 if __name__ == "__main__":

@@ -4,23 +4,22 @@ import Fuse from 'fuse.js';
 import Home from './pages/Home.jsx';
 import Viewer from './pages/Viewer.jsx';
 import SearchBar from './components/SearchBar.jsx';
-import Filters from './components/Filters.jsx';
 
-const SEARCH_KEYS = ['problem', 'ctf', 'category', 'author', 'tags', 'tools', 'techniques'];
-
-const defaultFilters = {
-  ctf: 'all',
-  category: 'all',
-  difficulty: 'all',
-  tags: [],
-};
+const SEARCH_KEYS = [
+  { name: 'problem', weight: 0.5 },
+  { name: 'summary', weight: 0.4 },
+  { name: 'ctf', weight: 0.25 },
+  { name: 'category', weight: 0.25 },
+  { name: 'author', weight: 0.2 },
+  { name: 'tags', weight: 0.15 },
+  { name: 'contentText', weight: 0.35 },
+];
 
 export default function App() {
   const [writeups, setWriteups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState(defaultFilters);
 
   useEffect(() => {
     let isMounted = true;
@@ -65,87 +64,110 @@ export default function App() {
     }
     return new Fuse(writeups, {
       keys: SEARCH_KEYS,
-      threshold: 0.35,
-      includeScore: true,
+      threshold: 0.3,
+      includeMatches: true,
+      ignoreLocation: true,
+      minMatchCharLength: 1,
     });
   }, [writeups]);
 
-  const filteredWriteups = useMemo(() => {
-    const baseList = searchTerm && fuse ? fuse.search(searchTerm).map((result) => result.item) : writeups;
+  const normalizedSearch = searchTerm.trim();
 
-    return baseList.filter((entry) => {
-      if (filters.ctf !== 'all' && entry.ctf !== filters.ctf) return false;
-      if (filters.category !== 'all' && entry.category !== filters.category) return false;
-      if (filters.difficulty !== 'all' && entry.difficulty !== filters.difficulty) return false;
-      if (filters.tags.length) {
-        const entryTags = Array.isArray(entry.tags) ? entry.tags.map(String) : [];
-        const hasAllTags = filters.tags.every((tag) => entryTags.includes(tag));
-        if (!hasAllTags) return false;
-      }
-      return true;
-    });
-  }, [searchTerm, fuse, writeups, filters]);
+  const searchResults = useMemo(() => {
+    if (!writeups.length) {
+      return [];
+    }
 
-  const filterOptions = useMemo(() => {
-    const ctfSet = new Set();
-    const categorySet = new Set();
-    const difficultySet = new Set();
-    const tagSet = new Set();
+    if (!normalizedSearch) {
+      return writeups.map((item) => ({ item, matches: [] }));
+    }
 
-    writeups.forEach((entry) => {
-      if (entry.ctf) ctfSet.add(entry.ctf);
-      if (entry.category) categorySet.add(entry.category);
-      if (entry.difficulty) difficultySet.add(entry.difficulty);
-      if (Array.isArray(entry.tags)) {
-        entry.tags.forEach((tag) => tag && tagSet.add(String(tag)));
-      }
-    });
+    if (!fuse) {
+      return [];
+    }
 
-    return {
-      ctfs: Array.from(ctfSet).sort((a, b) => a.localeCompare(b)),
-      categories: Array.from(categorySet).sort((a, b) => a.localeCompare(b)),
-      difficulties: Array.from(difficultySet).sort((a, b) => a.localeCompare(b)),
-      tags: Array.from(tagSet).sort((a, b) => a.localeCompare(b)),
-    };
-  }, [writeups]);
+    return fuse.search(normalizedSearch).map(({ item, matches }) => ({
+      item,
+      matches: matches ?? [],
+    }));
+  }, [writeups, normalizedSearch, fuse]);
 
-  const handleFilterChange = (updated) => {
-    setFilters((prev) => ({ ...prev, ...updated }));
-  };
-
-  const resetFilters = () => {
-    setFilters({ ...defaultFilters });
-  };
+  const directory = useMemo(() => buildDirectoryTree(writeups), [writeups]);
 
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1>CTF Writeups Explorer</h1>
-        <span>{writeups.length ? `${writeups.length} writeups indexed` : 'Loading index...'}</span>
+        <div>
+          <h1>CTF Writeups Navigator</h1>
+          <p className="header-subtitle">
+            {writeups.length
+              ? `Search across ${writeups.length} writeups, metadata, and content.`
+              : 'Loading the writeup index…'}
+          </p>
+        </div>
+        <SearchBar
+          value={searchTerm}
+          onSearchChange={setSearchTerm}
+          resultCount={searchResults.length}
+          disabled={loading || !!error}
+        />
       </header>
       <div className="app-content">
-        <aside className="sidebar" aria-label="Search and filters">
-          <SearchBar value={searchTerm} onSearchChange={setSearchTerm} />
-          <Filters
-            filters={filters}
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            onReset={resetFilters}
-          />
-        </aside>
         <main className="main-area">
           <Routes>
             <Route
               path="/"
-              element={<Home writeups={filteredWriteups} loading={loading} error={error} />}
+              element={
+                <Home
+                  loading={loading}
+                  error={error}
+                  results={searchResults}
+                  searchTerm={normalizedSearch}
+                  totalWriteups={writeups.length}
+                  directory={directory}
+                />
+              }
             />
-            <Route
-              path="/viewer/:ctf/:category/:problem"
-              element={<Viewer writeups={writeups} />}
-            />
+            <Route path="/viewer/:ctf/:category/:problem" element={<Viewer writeups={writeups} />} />
           </Routes>
         </main>
       </div>
     </div>
   );
+}
+
+function buildDirectoryTree(entries) {
+  const tree = new Map();
+
+  entries.forEach((entry) => {
+    const ctf = entry.ctf || 'Miscellaneous';
+    const category = entry.category || 'uncategorized';
+    const list = tree.get(ctf) ?? new Map();
+    if (!tree.has(ctf)) {
+      tree.set(ctf, list);
+    }
+    const problems = list.get(category) ?? [];
+    if (!list.has(category)) {
+      list.set(category, problems);
+    }
+    problems.push(entry);
+  });
+
+  return Array.from(tree.entries())
+    .sort((a, b) => a[0].localeCompare(b[0], undefined, { sensitivity: 'base' }))
+    .map(([ctf, categories]) => ({
+      name: ctf,
+      categories: Array.from(categories.entries())
+        .sort((a, b) => a[0].localeCompare(b[0], undefined, { sensitivity: 'base' }))
+        .map(([category, problems]) => ({
+          name: category,
+          entries: problems
+            .slice()
+            .sort((a, b) =>
+              (a.problem || a.path || '').localeCompare(b.problem || b.path || '', undefined, {
+                sensitivity: 'base',
+              }),
+            ),
+        })),
+    }));
 }

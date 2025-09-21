@@ -12,7 +12,7 @@ The repository also includes a small [search tool](search.py), through we can we
 
 ## Frontend quick start
 
-The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that indexes the markdown writeups and exposes search, filtering and rich previews.
+The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that indexes the markdown writeups and exposes global fuzzy search, a CTF directory minimap, and rich previews.
 
 1. (Recommended) Create a virtual environment in the repository root and install the generator dependency:
 
@@ -43,6 +43,12 @@ The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that 
    ```
 
 The generator writes `ui/public/writeups.json` and copies the markdown/attachment assets into `ui/public/writeups/` so they are available to the static site. The npm scripts automatically look for `PYTHON`, the active `VIRTUAL_ENV`, or a local `.venv` folder, so as long as you activate the environment (or create `.venv` in the repo root) the correct interpreter will be used without editing any paths.
+
+The UI mirrors the feel of [cp-algorithms](https://cp-algorithms.com/):
+
+* A single search box instantly scans titles, metadata, and markdown content.
+* Results show the context of the best match (with highlighting) and default to listing every writeup.
+* A collapsible directory in the sidebar lets you jump across CTFs and categories without filtering menus.
 
 > **Note:** The frontend uses `BrowserRouter`. When hosting on GitHub Pages ensure that the `base` option in [`ui/vite.config.js`](ui/vite.config.js) matches the deployment path (default `/writeups/`). If direct deep-links return 404s on GitHub Pages, enable the 404.html redirect or switch to `HashRouter`.
 
