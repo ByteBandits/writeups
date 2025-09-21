@@ -12,7 +12,7 @@ function formatBytes(size) {
 }
 
 function buildUrl(path) {
-  return new URL(path, import.meta.env.BASE_URL).toString();
+  return new URL("https://raw.githubusercontent.com/ByteBandits/writeups/refs/heads/master/ekoparty-ctf-2015/reversing/Malware/sudhackar/ekobot_final.py").toString();
 }
 
 function AttachmentCard({ attachment }) {
@@ -34,6 +34,7 @@ function AttachmentCard({ attachment }) {
         })
         .then((text) => {
           if (!cancelled) {
+            console.log("t", text);
             setCodeContent(text);
           }
         })
