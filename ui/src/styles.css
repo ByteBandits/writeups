@@ -1,0 +1,245 @@
+:root {
+  color-scheme: light dark;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f5;
+  color: #222;
+}
+
+body.dark {
+  background: #151515;
+  color: #eee;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #1f3c88, #39a0ed);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.sidebar {
+  width: 320px;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.main-area {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 1rem 0 0.5rem;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.writeup-card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.writeup-card:hover,
+.writeup-card:focus-within {
+  box-shadow: 0 4px 12px rgba(31, 60, 136, 0.15);
+}
+
+.writeup-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.tag-chip {
+  background: rgba(31, 60, 136, 0.12);
+  color: #1f3c88;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group select,
+.filter-group button {
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: white;
+  font-size: 0.95rem;
+}
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.filter-tags button {
+  border: none;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.filter-tags button.active {
+  background: #1f3c88;
+  color: white;
+}
+
+.viewer-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.viewer-toolbar nav {
+  font-size: 0.9rem;
+}
+
+.viewer-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.viewer-tabs button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+  cursor: pointer;
+}
+
+.viewer-tabs button.active {
+  background: #1f3c88;
+  color: white;
+  border-color: #1f3c88;
+}
+
+.markdown-body {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem 1.25rem;
+  max-width: 960px;
+}
+
+.markdown-body pre {
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.85);
+  color: #f5f5f5;
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.attachments-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.attachment-card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.75rem;
+}
+
+.attachment-preview {
+  margin-top: 0.5rem;
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+}
+
+@media (max-width: 900px) {
+  .app-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
