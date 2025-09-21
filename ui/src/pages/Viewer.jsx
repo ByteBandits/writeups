@@ -27,18 +27,16 @@ function buildBreadcrumb(entry) {
 
 export default function Viewer({ writeups }) {
   const params = useParams();
-  const { ctf: ctfParam, category: categoryParam, problem: problemParam } = params;
+  const { ctf: ctfParam, category: categoryParam, problem: problemParam, author: authorParam } = params;
 
   const entry = useMemo(() => {
     return writeups.find((item) => {
-      const encodedCtf = encodeURIComponent(item.ctf || 'unknown');
-      const encodedCategory = encodeURIComponent(item.category || 'misc');
-      const encodedProblem = encodeURIComponent(item.problem || item.path || 'writeup');
       return (
-        encodedCtf === ctfParam && encodedCategory === categoryParam && encodedProblem === problemParam
+        item.ctf === ctfParam && item.category === categoryParam && item.problem === problemParam
+        && item.author === authorParam
       );
     });
-  }, [writeups, ctfParam, categoryParam, problemParam]);
+  }, [writeups, ctfParam, categoryParam, problemParam, authorParam]);
 
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);

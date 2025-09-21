@@ -100,7 +100,7 @@ export default function App() {
         <div>
           <h1>CTF Writeups Navigator</h1>
           <p className="header-subtitle">
-            {writeups.length
+            {!loading
               ? `Search across ${writeups.length} writeups, metadata, and content.`
               : 'Loading the writeup index…'}
           </p>
@@ -128,7 +128,7 @@ export default function App() {
                 />
               }
             />
-            <Route path="/viewer/:ctf/:category/:problem" element={<Viewer writeups={writeups} />} />
+            <Route path="/viewer/:ctf/:category/:problem/:author" element={<Viewer writeups={writeups} />} />
           </Routes>
         </main>
       </div>
