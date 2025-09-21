@@ -14,9 +14,12 @@ The repository also includes a small [search tool](search.py), through we can we
 
 The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that indexes the markdown writeups and exposes search, filtering and rich previews.
 
-1. Install the generator dependency:
+1. (Recommended) Create a virtual environment in the repository root and install the generator dependency:
 
    ```bash
+   python -m venv .venv
+   source .venv/bin/activate            # On Windows use: .\.venv\Scripts\activate
+   python -m pip install --upgrade pip
    python -m pip install python-frontmatter
    ```
 
@@ -39,7 +42,7 @@ The repository now ships with a React-based frontend (inside [`ui/`](ui/)) that 
    npm run build
    ```
 
-The generator writes `ui/public/writeups.json` and copies the markdown/attachment assets into `ui/public/writeups/` so they are available to the static site.
+The generator writes `ui/public/writeups.json` and copies the markdown/attachment assets into `ui/public/writeups/` so they are available to the static site. The npm scripts automatically look for `PYTHON`, the active `VIRTUAL_ENV`, or a local `.venv` folder, so as long as you activate the environment (or create `.venv` in the repo root) the correct interpreter will be used without editing any paths.
 
 > **Note:** The frontend uses `BrowserRouter`. When hosting on GitHub Pages ensure that the `base` option in [`ui/vite.config.js`](ui/vite.config.js) matches the deployment path (default `/writeups/`). If direct deep-links return 404s on GitHub Pages, enable the 404.html redirect or switch to `HashRouter`.
 
@@ -52,19 +55,21 @@ writeups/<ctf-name>/<category>/<problem>.md
 writeups/<ctf-name>/<category>/<problem>_files/ (optional attachments)
 ```
 
-Every markdown file should start with YAML frontmatter describing the entry:
+Every markdown file should start with lightweight metadata markers (legacy frontmatter is still supported for backwards compatibility):
 
-```yaml
----
-ctf: SampleCTF 2025
-category: web
-problem: helloworld
-author: your-name
-points: 100
-difficulty: easy
-tags: [xss, challenge]
-date: 2025-09-21
----
 ```
+[](ctf=utctf-2020)
+[](type=pwn)
+[](problem=buffer-overflow)
+[](author=bytebandits)
+[](points=100)
+[](difficulty=medium)
+[](tags=buffer-overflow,rop)
+[](tools=gdb,python)
+[](techniques=ret2libc)
+[](files=challenge_files/exploit.py,challenge_files/notes.txt)
+```
+
+Values are comma separated where lists are expected. Additional keys such as `date` are also supported. The generator merges these markers with any YAML frontmatter present and falls back to the directory structure for missing fields.
 
 After adding or updating writeups, rerun `npm run generate` (or `npm run dev` / `npm run build`) so that the search index includes the new content.

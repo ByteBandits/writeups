@@ -6,3 +6,4 @@ ui/public/writeups.json
 ui/public/writeups/
 ui/dist
 ui/node_modules
+.venv/

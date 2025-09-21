@@ -192,6 +192,18 @@ function Metadata({ entry }) {
           <dd>{entry.tags.join(', ')}</dd>
         </>
       )}
+      {Array.isArray(entry.tools) && entry.tools.length > 0 && (
+        <>
+          <dt>Tools</dt>
+          <dd>{entry.tools.join(', ')}</dd>
+        </>
+      )}
+      {Array.isArray(entry.techniques) && entry.techniques.length > 0 && (
+        <>
+          <dt>Techniques</dt>
+          <dd>{entry.techniques.join(', ')}</dd>
+        </>
+      )}
     </dl>
   );
 }

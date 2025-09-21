@@ -3,12 +3,18 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterable, List
 
-import frontmatter
+try:
+    import frontmatter
+except ModuleNotFoundError as exc:  # pragma: no cover - defensive
+    sys.exit(
+        "Missing dependency 'python-frontmatter'. Install it with 'pip install python-frontmatter'."
+    )
 
 ROOT = Path(__file__).resolve().parent.parent
 WRITEUPS_DIR = ROOT / "writeups"
@@ -51,6 +57,9 @@ CODE_EXTS = {
 PDF_EXTS = {".pdf"}
 HTML_EXTS = {".html", ".htm"}
 
+LEGACY_META_PATTERN = re.compile(r"^\s*\[\]\(([^=()]+)=(.*)\)\s*$")
+LIST_FIELDS = {"tags", "files", "tools", "techniques"}
+
 
 def main() -> None:
     if not WRITEUPS_DIR.exists():
@@ -86,7 +95,10 @@ def process_markdown(md_path: Path) -> Dict[str, Any] | None:
         print(f"Failed to parse frontmatter for {rel_md_path}: {exc}", file=sys.stderr)
         return None
 
-    metadata = post.metadata or {}
+    frontmatter_metadata = post.metadata or {}
+    legacy_raw = parse_legacy_metadata(md_path)
+    legacy_metadata = convert_legacy_metadata(legacy_raw)
+    metadata = merge_metadata(frontmatter_metadata, legacy_metadata)
 
     ctf, category, problem_guess = derive_metadata_from_path(md_path)
 
@@ -101,6 +113,8 @@ def process_markdown(md_path: Path) -> Dict[str, Any] | None:
         "difficulty": metadata.get("difficulty"),
         "points": metadata.get("points"),
         "files": sanitize_string_list(normalize_list(metadata.get("files"))),
+        "tools": sanitize_string_list(normalize_list(metadata.get("tools"))),
+        "techniques": sanitize_string_list(normalize_list(metadata.get("techniques"))),
     }
 
     if not entry["author"]:
@@ -146,6 +160,97 @@ def normalize_list(value: Any) -> List[Any] | None:
     if isinstance(value, str):
         return [item.strip() for item in value.split(",") if item.strip()]
     return [value]
+
+
+def parse_legacy_metadata(md_path: Path) -> Dict[str, str]:
+    metadata: Dict[str, str] = {}
+    try:
+        text = md_path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = md_path.read_text(encoding="utf-8", errors="ignore")
+
+    started = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+
+        match = LEGACY_META_PATTERN.match(stripped)
+        if match:
+            started = True
+            key = match.group(1).strip().lower()
+            value = match.group(2).strip()
+            if key and value:
+                metadata[key] = value
+            continue
+
+        if not started:
+            break
+        break
+
+    return metadata
+
+
+def convert_legacy_metadata(raw: Dict[str, str]) -> Dict[str, Any]:
+    metadata: Dict[str, Any] = {}
+    for key, value in raw.items():
+        if not value:
+            continue
+        if key == "ctf":
+            metadata["ctf"] = value
+        elif key in {"type", "category"}:
+            type_values = split_metadata_values(value)
+            if type_values:
+                metadata["category"] = type_values[0]
+                extra_types = type_values[1:]
+                if extra_types:
+                    metadata.setdefault("tags", [])
+                    metadata["tags"].extend(extra_types)
+        elif key == "tags":
+            metadata["tags"] = split_metadata_values(value)
+        elif key == "files":
+            metadata["files"] = split_metadata_values(value)
+        elif key in {"tools", "techniques"}:
+            metadata[key] = split_metadata_values(value)
+        elif key in {"author", "authors"}:
+            metadata["author"] = value
+        elif key == "points":
+            metadata["points"] = value
+        elif key == "difficulty":
+            metadata["difficulty"] = value
+        elif key == "problem":
+            metadata["problem"] = value
+        elif key == "date":
+            metadata["date"] = value
+    return metadata
+
+
+def split_metadata_values(value: str) -> List[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def merge_metadata(primary: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = dict(primary)
+    for key, value in override.items():
+        if key in LIST_FIELDS:
+            base_values = normalize_list(merged.get(key)) or []
+            override_values = normalize_list(value) or []
+            merged[key] = dedupe_preserve_order([*base_values, *override_values])
+        else:
+            merged[key] = value
+    return merged
+
+
+def dedupe_preserve_order(values: Iterable[Any]) -> List[Any]:
+    seen: set[str] = set()
+    result: List[Any] = []
+    for value in values:
+        key = str(value)
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(value)
+    return result
 
 
 def discover_attachments(md_path: Path) -> List[Dict[str, Any]]:
@@ -207,10 +312,15 @@ def sanitize_string_list(values: List[Any] | None) -> List[str] | None:
     if not values:
         return None
     sanitized: List[str] = []
+    seen: set[str] = set()
     for value in values:
         if value is None:
             continue
-        sanitized.append(str(value))
+        text = str(value)
+        if text in seen:
+            continue
+        seen.add(text)
+        sanitized.append(text)
     return sanitized or None
 
 

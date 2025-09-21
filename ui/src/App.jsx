@@ -6,7 +6,7 @@ import Viewer from './pages/Viewer.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import Filters from './components/Filters.jsx';
 
-const SEARCH_KEYS = ['problem', 'ctf', 'category', 'author', 'tags'];
+const SEARCH_KEYS = ['problem', 'ctf', 'category', 'author', 'tags', 'tools', 'techniques'];
 
 const defaultFilters = {
   ctf: 'all',

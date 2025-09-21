@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate": "python ../scripts/generate_index.py",
+    "generate": "node ../scripts/run-generate.mjs",
     "dev": "npm run generate && vite",
     "build": "npm run generate && vite build",
     "preview": "vite preview"
