@@ -29,11 +29,15 @@ export default function Home() {
       <header className="hero">
         <div className="hero-brand">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/skull.png" alt="" className="hero-skull" />
+          <img
+            src={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/skull.png"}
+            alt=""
+            className="hero-skull"
+          />
           <pre className="ascii">{LOGO}</pre>
         </div>
         <p className="stats">
-          <Link href="/writeups/">
+          <Link href="/browse/">
             <b>{writeups.length}</b> writeups
           </Link>{" "}
           · <b>{getCtfs(writeups).length}</b> ctfs ·{" "}
@@ -59,7 +63,7 @@ export default function Home() {
               </span>
             </Link>
           ))}
-          <Link className="witem" href="/writeups/">
+          <Link className="witem" href="/browse/">
             <span className="m">→ browse all {writeups.length} writeups</span>
           </Link>
         </section>

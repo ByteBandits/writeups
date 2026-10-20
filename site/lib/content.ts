@@ -123,7 +123,7 @@ export function getAllWriteups(): Writeup[] {
 }
 
 export const writeupUrl = (w: Writeup) =>
-  "/writeups/" + w.parts.map(encodeURIComponent).join("/") + "/";
+  "/" + w.parts.map(encodeURIComponent).join("/") + "/";
 
 const count = (ws: Writeup[], key: (w: Writeup) => string[]) => {
   const m = new Map<string, number>();

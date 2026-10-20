@@ -13,9 +13,10 @@ type Status = "idle" | "loading" | "ready" | "unavailable";
 
 let pfPromise: Promise<any> | null = null;
 
-const PF_URL = "/pagefind/pagefind.js";
+const PF_URL =
+  (process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/pagefind/pagefind.js";
 
-function loadPagefind(): Promise<any> {
+export function loadPagefind(): Promise<any> {
   if (!pfPromise) {
     pfPromise = import(/* webpackIgnore: true */ PF_URL).then((pf: any) =>
       pf.init().then(() => pf)

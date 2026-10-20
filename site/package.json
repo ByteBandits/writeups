@@ -7,7 +7,7 @@
     "predev": "node scripts/copy-content.mjs",
     "dev": "next dev",
     "prebuild": "node scripts/copy-content.mjs",
-    "build": "BUILD_EXPORT=1 next build && pagefind --site dist",
+    "build": "BUILD_EXPORT=1 next build && pagefind --site dist --base-path \"${BUILD_BASE_PATH:-/writeups}\"",
     "preview": "npx serve dist"
   },
   "dependencies": {
