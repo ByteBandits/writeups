@@ -106,10 +106,12 @@ export function usePagefind(query: string, limit = 8) {
           out.results.slice(0, limit).map((r: any) => r.data())
         );
         if (seq.current !== id) return;
+        const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
         setTotal(out.results.length);
         setResults(
           top.map((d: any) => ({
-            url: d.url,
+            // pagefind URLs are export-relative; prefix with the mount path
+            url: d.url.startsWith("/") ? base + d.url : d.url,
             title: d.meta?.title || d.url,
             excerpt: d.excerpt,
             filters: d.filters ?? {},
