@@ -7,8 +7,8 @@
     "predev": "node scripts/copy-content.mjs",
     "dev": "next dev",
     "prebuild": "node scripts/copy-content.mjs",
-    "build": "BUILD_EXPORT=1 next build && pagefind --site out",
-    "preview": "npx serve out"
+    "build": "BUILD_EXPORT=1 next build && pagefind --site dist",
+    "preview": "npx serve dist"
   },
   "dependencies": {
     "next": "^15.1.6",
