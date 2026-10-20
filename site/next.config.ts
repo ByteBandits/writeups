@@ -1,15 +1,21 @@
 import type { NextConfig } from "next";
 
+// The site is built to mount at a path prefix (default /writeups on the
+// repo's project Pages). A future custom-domain build sets BUILD_BASE_PATH="".
+const isExport = process.env.BUILD_EXPORT === "1";
+const BASE_PATH = process.env.BUILD_BASE_PATH ?? "/writeups";
+
 const nextConfig: NextConfig = {
-  // static export only for production builds — dev runs dynamically,
-  // which avoids export-mode param strictness that doesn't affect builds
-  output: process.env.BUILD_EXPORT === "1" ? "export" : undefined,
+  output: isExport ? "export" : undefined,
+  basePath: isExport ? BASE_PATH : "",
   // with output:export the static site lands IN distDir — keep it out of
   // the dev server's .next and name it as the publishable artifact
-  distDir: process.env.BUILD_EXPORT === "1" ? "dist" : ".next",
+  distDir: isExport ? "dist" : ".next",
   trailingSlash: true,
   images: { unoptimized: true },
-  outputFileTracingRoot: __dirname,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isExport ? BASE_PATH : "",
+  },
 };
 
 export default nextConfig;

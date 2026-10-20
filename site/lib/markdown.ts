@@ -76,7 +76,10 @@ function noteDead(from: string, target: string) {
 }
 
 const toUrl = (segments: string[], suffix = "") =>
-  "/content/" + segments.map(encodeURIComponent).join("/") + suffix;
+  (process.env.NEXT_PUBLIC_BASE_PATH ?? "") +
+  "/content/" +
+  segments.map(encodeURIComponent).join("/") +
+  suffix;
 
 export interface LinkedFile {
   url: string;

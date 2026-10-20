@@ -3,7 +3,7 @@ import { getAllWriteups, writeupUrl } from "@/lib/content";
 
 export const dynamic = "force-static";
 
-const BASE = "https://writeups.bytebandits.live";
+const BASE = "https://bytebandits.github.io/writeups";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

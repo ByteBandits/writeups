@@ -131,7 +131,10 @@ function Palette({ onClose }: { onClose: () => void }) {
           {term && results.length > 0 && (
             <div className="search-hint">
               ↵ open · {results.length} shown ·{" "}
-              <a href={`/search/?q=${encodeURIComponent(query)}`} onClick={onClose}>
+              <a
+                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search/?q=${encodeURIComponent(query)}`}
+                onClick={onClose}
+              >
                 all results →
               </a>
             </div>

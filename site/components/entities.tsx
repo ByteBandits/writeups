@@ -17,10 +17,12 @@ const KIND_ORDER: Record<Entity["kind"], number> = {
   technique: 5,
 };
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const entityUrl = (e: Entity) =>
   e.kind === "tool" || e.kind === "technique"
-    ? `/search/?q=${encodeURIComponent(`${e.kind}:${e.name}`)}`
-    : `/${{ author: "authors", tag: "tags", ctf: "ctfs", category: "categories" }[e.kind]}/${encodeURIComponent(e.name)}/`;
+    ? `${BASE}/search/?q=${encodeURIComponent(`${e.kind}:${e.name}`)}`
+    : `${BASE}/${{ author: "authors", tag: "tags", ctf: "ctfs", category: "categories" }[e.kind]}/${encodeURIComponent(e.name)}/`;
 
 function lev(a: string, b: string): number {
   if (Math.abs(a.length - b.length) > 3) return 99;
@@ -68,14 +70,14 @@ export function matchEntities(term: string, universe: Entity[]): Entity[] {
 }
 
 // ── shared universe loading (piggybacks on search-core's pagefind) ──
+import { loadPagefind } from "./search-core";
+
 let universePromise: Promise<Entity[]> | null = null;
 
 export function loadUniverse(): Promise<Entity[]> {
   if (!universePromise) {
     universePromise = (async () => {
-      const PF_URL = "/pagefind/pagefind.js";
-      const pf = await import(/* webpackIgnore: true */ PF_URL);
-      await pf.init();
+      const pf = await loadPagefind();
       const raw = await pf.filters();
       const out: Entity[] = [];
       for (const [kind, values] of Object.entries(raw ?? {})) {

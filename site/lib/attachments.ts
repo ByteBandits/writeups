@@ -101,6 +101,7 @@ export async function renderFilePreview(
 }
 
 export const contentUrl = (absPath: string) =>
+  (process.env.NEXT_PUBLIC_BASE_PATH ?? "") +
   "/content/" +
   relative(REPO_ROOT, absPath)
     .split("/")

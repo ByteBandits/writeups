@@ -18,12 +18,16 @@ export default function RootLayout({
         <nav className="topbar">
           <Link href="/" className="brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/skull.png" alt="ByteBandits" className="brand-logo" />
+            <img
+              src={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/skull.png"}
+              alt="ByteBandits"
+              className="brand-logo"
+            />
             bytebandits@ctf<span className="path">:~$</span>
           </Link>
           <TopBarSearch />
           <div className="navlinks">
-            <Link href="/writeups/">writeups</Link>
+            <Link href="/browse/">writeups</Link>
             <Link href="/tags/">tags</Link>
             <Link href="/authors/">authors</Link>
             <a

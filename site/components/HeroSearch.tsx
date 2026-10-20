@@ -82,7 +82,9 @@ export function HeroSearch({ categories }: { categories: string[] }) {
           ))}
           {term && results.length > 0 && (
             <div className="search-hint">
-              <a href={`/search/?q=${encodeURIComponent(fullQuery)}`}>
+              <a
+                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search/?q=${encodeURIComponent(fullQuery)}`}
+              >
                 all results for “{term}” →
               </a>
             </div>
