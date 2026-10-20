@@ -27,10 +27,17 @@ export default function Home() {
   return (
     <>
       <header className="hero">
-        <pre className="ascii">{LOGO}</pre>
+        <div className="hero-brand">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/skull.png" alt="" className="hero-skull" />
+          <pre className="ascii">{LOGO}</pre>
+        </div>
         <p className="stats">
-          <b>{writeups.length}</b> writeups · <b>{ctfs.length === 5 ? getCtfs(writeups).length : ctfs.length}</b>{" "}
-          ctfs · <b>{getAuthors(writeups).length}</b> authors · est. 2015
+          <Link href="/writeups/">
+            <b>{writeups.length}</b> writeups
+          </Link>{" "}
+          · <b>{getCtfs(writeups).length}</b> ctfs ·{" "}
+          <b>{getAuthors(writeups).length}</b> authors · est. 2015
         </p>
         <HeroSearch categories={categories} />
       </header>
@@ -52,6 +59,9 @@ export default function Home() {
               </span>
             </Link>
           ))}
+          <Link className="witem" href="/writeups/">
+            <span className="m">→ browse all {writeups.length} writeups</span>
+          </Link>
         </section>
         <aside>
           <div className="secthead">top tags</div>

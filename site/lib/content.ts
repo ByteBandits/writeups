@@ -64,6 +64,8 @@ function extractTitle(raw: string): string | undefined {
 const list = (v?: string) =>
   v ? v.split(",").map((s) => s.trim()).filter(Boolean) : [];
 
+import { normalizeCategory } from "./categories";
+
 let dateCache: Map<string, string> | null = null;
 function commitDates(): Map<string, string> {
   if (dateCache) return dateCache;
@@ -103,7 +105,7 @@ export function getAllWriteups(): Writeup[] {
     writeups.push({
       parts: segments,
       ctf,
-      category: meta.type || category,
+      category: normalizeCategory(meta.type || category),
       problem,
       author,
       title: extractTitle(raw) || problem,

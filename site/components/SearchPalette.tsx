@@ -9,7 +9,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { usePagefind, ResultCard, parseQuery } from "./search-core";
+import { usePagefind, ResultCard, parseQuery, KbdK } from "./search-core";
+import { EntitySuggestions } from "./entities";
 
 const PaletteCtx = createContext<() => void>(() => {});
 
@@ -24,21 +25,31 @@ export function TopBarSearch() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setOpen((v) => !v);
+      const cmdOrCtrlK =
+        (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+      const slash =
+        e.key === "/" &&
+        !(e.target as HTMLElement).closest("input, textarea, [contenteditable]");
+      if (!cmdOrCtrlK && !slash) return;
+      e.preventDefault();
+      if (pathname === "/") {
+        // home already has the hero bar — just move focus to it
+        document.getElementById("hero-search")?.focus();
+        setOpen(false);
+        return;
       }
+      setOpen((v) => !v);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [pathname]);
 
   return (
     <PaletteCtx.Provider value={openPalette}>
       {pathname !== "/" && (
         <button className="topsearch" onClick={openPalette}>
           <span style={{ color: "var(--green)" }}>&gt;_</span> search writeups…
-          <kbd>⌘K</kbd>
+          <KbdK />
         </button>
       )}
       {open && <Palette onClose={() => setOpen(false)} />}
@@ -94,6 +105,7 @@ function Palette({ onClose }: { onClose: () => void }) {
           />
         </div>
         <div className="results">
+          {term && <EntitySuggestions term={term} />}
           {status === "unavailable" && (
             <div className="search-hint">
               search index not built yet — run <code>npm run build</code>

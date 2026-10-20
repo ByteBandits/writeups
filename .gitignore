@@ -1,3 +1,13 @@
 *.draft
 *.tmp
 *.swp
+
+# site build artifacts
+site/node_modules/
+site/.next/
+site/out/
+site/public/content/
+site/next-env.d.ts
+site/tsconfig.tsbuildinfo
+site/public/pagefind/
+site/.next-build/

@@ -24,6 +24,37 @@ function loadPagefind(): Promise<any> {
   return pfPromise;
 }
 
+/** filterKey -> (lowercase value -> canonical value), for case-insensitive filters */
+let filterUniverse: Record<string, Record<string, string>> | null = null;
+
+async function getFilterUniverse(pf: any) {
+  if (!filterUniverse) {
+    const raw = await pf.filters();
+    filterUniverse = {};
+    for (const [key, values] of Object.entries(raw ?? {})) {
+      const map: Record<string, string> = {};
+      for (const v of Object.keys(values as object)) map[v.toLowerCase()] = v;
+      filterUniverse[key] = map;
+    }
+  }
+  return filterUniverse;
+}
+
+function normalizeFilters(
+  filters: Record<string, string[]>,
+  universe: Record<string, Record<string, string>>
+) {
+  const out: Record<string, string[]> = {};
+  for (const [key, values] of Object.entries(filters)) {
+    const map = universe[key] ?? {};
+    const mapped = values
+      .map((v) => map[v.toLowerCase()])
+      .filter((v): v is string => !!v);
+    if (mapped.length) out[key] = mapped;
+  }
+  return out;
+}
+
 const FILTER_KEYS = new Set(["tag", "author", "ctf", "category", "tool", "technique"]);
 
 export function parseQuery(q: string): {
@@ -45,6 +76,7 @@ export function parseQuery(q: string): {
 export function usePagefind(query: string, limit = 8) {
   const [status, setStatus] = useState<Status>("idle");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [total, setTotal] = useState(0);
   const seq = useRef(0);
 
   useEffect(() => {
@@ -57,6 +89,7 @@ export function usePagefind(query: string, limit = 8) {
     const { term, filters } = parseQuery(query);
     if (!term && Object.keys(filters).length === 0) {
       setResults([]);
+      setTotal(0);
       return;
     }
     if (status !== "ready") return;
@@ -64,11 +97,15 @@ export function usePagefind(query: string, limit = 8) {
     const t = setTimeout(async () => {
       try {
         const pf = await loadPagefind();
-        const out = await pf.search(term || null, { filters });
+        const universe = await getFilterUniverse(pf);
+        const out = await pf.search(term || null, {
+          filters: normalizeFilters(filters, universe),
+        });
         const top = await Promise.all(
           out.results.slice(0, limit).map((r: any) => r.data())
         );
         if (seq.current !== id) return;
+        setTotal(out.results.length);
         setResults(
           top.map((d: any) => ({
             url: d.url,
@@ -78,13 +115,22 @@ export function usePagefind(query: string, limit = 8) {
           }))
         );
       } catch {
-        if (seq.current === id) setResults([]);
+        if (seq.current === id) {
+          setResults([]);
+          setTotal(0);
+        }
       }
     }, 150);
     return () => clearTimeout(t);
   }, [query, status, limit]);
 
-  return { results, status };
+  return { results, total, status };
+}
+
+// "/" — the universal search key (github/google/youtube convention).
+// Cmd+K (mac) and Ctrl+K (windows/linux) also work, unlabeled.
+export function KbdK() {
+  return <kbd>/</kbd>;
 }
 
 export function ResultCard({

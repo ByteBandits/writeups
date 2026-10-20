@@ -281,6 +281,23 @@ function rehypeHeadings(toc: TocEntry[]) {
   };
 }
 
+/** remove the README's own leading h1 when it duplicates the page header */
+function rehypeStripTitleH1(title?: string) {
+  if (!title) return () => () => {};
+  const wanted = title.trim().toLowerCase();
+  return () => (tree: any) => {
+    const kids = tree.children ?? [];
+    for (let i = 0; i < kids.length; i++) {
+      const n = kids[i];
+      if (n.type !== "element") continue;
+      if (n.tagName === "h1" && textOf(n).trim().toLowerCase() === wanted) {
+        kids.splice(i, 1);
+      }
+      break; // only inspect the first element
+    }
+  };
+}
+
 export interface Rendered {
   html: string;
   toc: TocEntry[];
@@ -290,7 +307,8 @@ export interface Rendered {
 
 export async function renderMarkdown(
   raw: string,
-  relDir: string
+  relDir: string,
+  title?: string
 ): Promise<Rendered> {
   const toc: TocEntry[] = [];
   const linkedFiles = new Map<string, LinkedFile>();
@@ -301,6 +319,7 @@ export async function renderMarkdown(
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(rehypeAssets(relDir, linkedFiles))
+    .use(rehypeStripTitleH1(title))
     .use(rehypePrettyCode, {
       theme: "github-dark-dimmed",
       keepBackground: false,

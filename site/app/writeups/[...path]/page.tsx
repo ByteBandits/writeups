@@ -51,6 +51,27 @@ function findWriteup(parts: string[]): Writeup | undefined {
   );
 }
 
+const escHtml = (s: string) =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+/** hidden filter spans for search facets (visible header covers full-text) */
+function filterMetaHtml(w: Writeup): string {
+  const span = (key: string, val: string) =>
+    `<span class="sr-only" data-pagefind-filter="${key}">${escHtml(val)}</span>`;
+  return [
+    span("ctf", w.ctf),
+    span("category", w.category),
+    span("author", w.author),
+    ...w.tags.map((t) => span("tag", t)),
+    ...w.tools.map((t) => span("tool", t)),
+    ...w.techniques.map((t) => span("technique", t)),
+  ].join("");
+}
+
 export default async function WriteupPage({
   params,
 }: {
@@ -79,7 +100,7 @@ export default async function WriteupPage({
   }
 
   const raw = readFileSync(w.file, "utf8");
-  const { html, toc, linkedFiles } = await renderMarkdown(raw, w.relDir);
+  const { html, toc, linkedFiles } = await renderMarkdown(raw, w.relDir, w.title);
   const attachments = await getAttachments(w);
   const all = getAllWriteups();
   const moreCtf = all.find((x) => x.ctf === w.ctf && x.relDir !== w.relDir);
@@ -90,8 +111,8 @@ export default async function WriteupPage({
   const crumbs = w.parts.slice(0, -1);
 
   return (
-    <div className="wrap">
-      <main>
+    <div className={`wrap${toc.length > 1 ? "" : " no-toc"}`}>
+      <main data-pagefind-body>
         <div className="crumbs">
           <Link href="/">~</Link>
           {crumbs.map((seg, i) => {
@@ -137,55 +158,29 @@ export default async function WriteupPage({
                 {t}
               </span>
             ))}
+            <span className="byline">
+              by{" "}
+              <Link href={`/authors/${encodeURIComponent(w.author)}/`}>
+                {w.author}
+              </Link>
+              {w.updated &&
+                ` · ${new Date(w.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`}
+              {" · "}
+              <a
+                href={`https://github.com/ByteBandits/writeups/tree/master/${w.relDir}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                view source ⎇
+              </a>
+            </span>
           </div>
-          <div className="byline">
-            by{" "}
-            <Link href={`/authors/${encodeURIComponent(w.author)}/`}>
-              {w.author}
-            </Link>
-            {w.updated &&
-              ` · last updated ${new Date(w.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`}
-            {" · "}
-            <a
-              href={`https://github.com/ByteBandits/writeups/tree/master/${w.relDir}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              view source ⎇
-            </a>
-          </div>
-          <hr className="rule" />
         </div>
-
-        <span className="sr-only" data-pagefind-filter="ctf">
-          {w.ctf}
-        </span>
-        <span className="sr-only" data-pagefind-filter="category">
-          {w.category}
-        </span>
-        <span className="sr-only" data-pagefind-filter="author">
-          {w.author}
-        </span>
-        {w.tags.map((t) => (
-          <span className="sr-only" data-pagefind-filter="tag" key={t}>
-            {t}
-          </span>
-        ))}
-        {w.tools.map((t) => (
-          <span className="sr-only" data-pagefind-filter="tool" key={t}>
-            {t}
-          </span>
-        ))}
-        {w.techniques.map((t) => (
-          <span className="sr-only" data-pagefind-filter="technique" key={t}>
-            {t}
-          </span>
-        ))}
+        <hr className="rule" />
 
         <article
           className="content"
-          data-pagefind-body
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: filterMetaHtml(w) + html }}
         />
         <ContentEnhancer selector=".content" files={linkedFiles} />
 

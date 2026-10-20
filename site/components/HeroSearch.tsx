@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { usePagefind, ResultCard, parseQuery } from "./search-core";
+import { usePagefind, ResultCard, parseQuery, KbdK } from "./search-core";
+import { EntitySuggestions } from "./entities";
 
 export function HeroSearch({ categories }: { categories: string[] }) {
   const router = useRouter();
@@ -31,6 +32,7 @@ export function HeroSearch({ categories }: { categories: string[] }) {
       <div className="bigsearch">
         <span className="prompt">&gt;</span>
         <input
+          id="hero-search"
           value={query}
           onFocus={() => setFocused(true)}
           onChange={(e) => setQuery(e.target.value)}
@@ -41,6 +43,7 @@ export function HeroSearch({ categories }: { categories: string[] }) {
           placeholder="search writeups — heap, z3, author:sudhackar…"
           aria-label="Search writeups"
         />
+        <KbdK />
       </div>
       {cats.length > 0 && (
         <div className="chips">
@@ -60,6 +63,7 @@ export function HeroSearch({ categories }: { categories: string[] }) {
       )}
       {open && (
         <div className="results">
+          {term && <EntitySuggestions term={term} />}
           {status === "unavailable" && (
             <div className="search-hint">
               search index not built yet — run <code>npm run build</code>

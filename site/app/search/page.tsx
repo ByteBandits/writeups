@@ -2,17 +2,20 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { ResultCard, usePagefind } from "@/components/search-core";
+import { ResultCard, usePagefind, parseQuery } from "@/components/search-core";
+import { EntitySuggestions } from "@/components/entities";
 
 function SearchInner() {
   const params = useSearchParams();
   const router = useRouter();
   const [query, setQuery] = useState(params.get("q") ?? "");
-  const { results, status } = usePagefind(query, 30);
+  const [limit, setLimit] = useState(30);
+  const { results, total, status } = usePagefind(query, limit);
 
   useEffect(() => {
     const q = params.get("q") ?? "";
     setQuery(q);
+    setLimit(30);
   }, [params]);
 
   return (
@@ -33,6 +36,9 @@ function SearchInner() {
         />
       </div>
       <div className="results">
+        {parseQuery(query).term && (
+          <EntitySuggestions term={parseQuery(query).term} />
+        )}
         {status === "unavailable" && (
           <div className="search-hint">
             search index not built yet — run <code>npm run build</code>
@@ -44,6 +50,25 @@ function SearchInner() {
         {results.map((r) => (
           <ResultCard key={r.url} r={r} />
         ))}
+        {total > 0 && (
+          <div className="search-hint">
+            showing {results.length} of {total}
+            {results.length < total && (
+              <>
+                {" — "}
+                <a
+                  href="#more"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLimit((l) => l + 30);
+                  }}
+                >
+                  load more ↓
+                </a>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

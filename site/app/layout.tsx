@@ -17,6 +17,8 @@ export default function RootLayout({
       <body>
         <nav className="topbar">
           <Link href="/" className="brand">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/skull.png" alt="ByteBandits" className="brand-logo" />
             bytebandits@ctf<span className="path">:~$</span>
           </Link>
           <TopBarSearch />
