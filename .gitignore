@@ -10,4 +10,4 @@ site/public/content/
 site/next-env.d.ts
 site/tsconfig.tsbuildinfo
 site/public/pagefind/
-site/.next-build/
+site/dist/
