@@ -85,7 +85,7 @@ export function BrowseGrid({ writeups }: { writeups: BrowseItem[] }) {
             <a
               className="wcard"
               key={w.url}
-              href={w.url}
+              href={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + w.url}
               style={{ borderLeftColor: color }}
             >
               <div className="wcard-title">{w.title}</div>
