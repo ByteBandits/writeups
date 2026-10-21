@@ -118,7 +118,7 @@ export default async function WriteupPage({
           {crumbs.map((seg, i) => {
             const isLast = i === crumbs.length - 1;
             const href = isLast
-              ? `/writeups/${crumbs.map(encodeURIComponent).join("/")}/`
+              ? `/${crumbs.map(encodeURIComponent).join("/")}/`
               : i === 0
                 ? `/ctfs/${encodeURIComponent(seg)}/`
                 : `/ctfs/${encodeURIComponent(w.ctf)}/#${encodeURIComponent(seg)}`;
