@@ -1,16 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { usePagefind, ResultCard, parseQuery, KbdK } from "./search-core";
-import { EntitySuggestions } from "./entities";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { usePagefind, ResultCard, KbdK, replaceFilter } from "./search-core";
+import { SearchBox, SearchStatus, badTokens } from "./search-ui";
 
 const PaletteCtx = createContext<() => void>(() => {});
 
@@ -61,82 +55,65 @@ function Palette({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [sel, setSel] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { results, status } = usePagefind(query);
-  const { term } = parseQuery(query);
-
-  useEffect(() => inputRef.current?.focus(), []);
+  const s = usePagefind(query);
+  const change = (q: string) => {
+    setQuery(q);
+    setSel(0);
+  };
+  const searchHref = `/search/?q=${encodeURIComponent(query.trim())}`;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSel((s) => Math.min(s + 1, results.length - 1));
+        setSel((i) => Math.min(i + 1, s.results.length - 1));
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSel((s) => Math.max(s - 1, 0));
+        setSel((i) => Math.max(i - 1, 0));
       }
-      if (e.key === "Enter") {
-        if (results[sel]) router.push(results[sel].url);
-        else if (term) router.push(`/search/?q=${encodeURIComponent(query)}`);
+      // Enter on a focused pill/chip button activates that button instead
+      if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") {
+        if (s.results[sel]) router.push(s.results[sel].url);
+        else if (query.trim()) router.push(searchHref);
+        else return;
         onClose();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [results, sel, term, query, router, onClose]);
+  }, [s.results, sel, query, searchHref, router, onClose]);
 
   return (
     <div className="palette-backdrop" onClick={onClose}>
       <div className="palette" onClick={(e) => e.stopPropagation()}>
-        <div className="bigsearch">
-          <span className="prompt">&gt;</span>
-          <input
-            ref={inputRef}
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSel(0);
-            }}
-            placeholder="search — try heap, tag:z3, author:sudhackar"
-            aria-label="Search writeups"
-          />
-        </div>
+        <SearchBox
+          query={query}
+          onChange={change}
+          placeholder="search writeups — heap, z3, sudhackar…"
+          bad={badTokens(s.unresolved)}
+          autoFocus
+        />
         <div className="results">
-          {term && <EntitySuggestions term={term} />}
-          {status === "unavailable" && (
-            <div className="search-hint">
-              search index not built yet — run <code>npm run build</code>
-            </div>
-          )}
-          {status !== "unavailable" && !term && (
-            <div className="search-hint">
-              type to search content, tags, authors… · filters: tag:, author:,
-              ctf:
-            </div>
-          )}
-          {term && results.length === 0 && status === "ready" && (
-            <div className="search-hint">no results for “{term}”</div>
-          )}
-          {results.map((r, i) => (
-            <ResultCard
-              key={r.url}
-              r={r}
-              selected={i === sel}
-              onClick={onClose}
-            />
+          <SearchStatus
+            query={query}
+            status={s.status}
+            settled={s.settled}
+            total={s.total}
+            corrections={s.corrections}
+            unresolved={s.unresolved}
+            onSwap={(k, f, t) => change(replaceFilter(query, k, f, t))}
+          />
+          {s.results.map((r, i) => (
+            <ResultCard key={r.url} r={r} selected={i === sel} onClick={onClose} />
           ))}
-          {term && results.length > 0 && (
+          {s.results.length > 0 && (
             <div className="search-hint">
-              ↵ open · {results.length} shown ·{" "}
-              <a
-                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search/?q=${encodeURIComponent(query)}`}
-                onClick={onClose}
-              >
+              ↵ open · {s.results.length} of {s.total} ·{" "}
+              <Link href={searchHref} onClick={onClose}>
                 all results →
-              </a>
+              </Link>
             </div>
           )}
         </div>

@@ -37,7 +37,7 @@ await new Promise((r) => setTimeout(r, 2000));
 const sugg = await page.$$eval(".entity-chip", (els) => els.map((e) => e.textContent));
 ok("'sudhakar' suggests sudhackar", sugg.some((s) => s.includes("sudhackar")), sugg[0] ?? "none");
 const suggHref = await page.$eval(".entity-chip", (el) => el.getAttribute("href"));
-ok("suggestion links to author page", suggHref === "/authors/sudhackar/", suggHref ?? "");
+ok("suggestion links to author page", suggHref.endsWith("/authors/sudhackar/"), suggHref ?? "");
 
 // ── load more ──
 await page.goto(`${BASE}/search/?q=${encodeURIComponent("author:sudhackar")}`, { waitUntil: "networkidle0" });
@@ -57,9 +57,9 @@ if (more) {
 // ── logo + favicon ──
 await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
 const logo = await page.$eval(".brand-logo", (el) => el.getAttribute("src"));
-ok("skull logo in topbar", logo === "/skull.png");
+ok("skull logo in topbar", logo.endsWith("/skull.png"));
 const iconLink = await page.$eval('link[rel="icon"]', (el) => el.getAttribute("href")).catch(() => "");
-ok("favicon is skull jpg", iconLink.includes("icon.png"), iconLink);
+ok("favicon is skull jpg", iconLink.includes("icon.jpg"), iconLink);
 
 await browser.close();
 console.log("---");

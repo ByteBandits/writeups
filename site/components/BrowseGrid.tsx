@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { CATEGORY_COLORS } from "@/lib/categories";
+import Link from "next/link";
 
 export interface BrowseItem {
   title: string;
@@ -82,10 +83,11 @@ export function BrowseGrid({ writeups }: { writeups: BrowseItem[] }) {
         {filtered.map((w) => {
           const color = CATEGORY_COLORS[w.category] ?? FALLBACK_COLOR;
           return (
-            <a
+            <Link
               className="wcard"
               key={w.url}
-              href={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + w.url}
+              href={w.url}
+              prefetch={false}
               style={{ borderLeftColor: color }}
             >
               <div className="wcard-title">{w.title}</div>
@@ -94,7 +96,7 @@ export function BrowseGrid({ writeups }: { writeups: BrowseItem[] }) {
               </div>
               <div className="wcard-meta">{w.ctf}</div>
               <div className="wcard-meta author">{w.author}</div>
-            </a>
+            </Link>
           );
         })}
       </div>

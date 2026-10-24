@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { codeToHtml } from "shiki";
 import type { Writeup } from "./content";
+import { siteUrl } from "./url";
 
 const REPO_ROOT = resolve(process.cwd(), "..");
 const IMAGE_EXT = new Set(["png", "jpg", "jpeg", "gif", "svg", "webp"]);
@@ -101,21 +102,21 @@ export async function renderFilePreview(
 }
 
 export const contentUrl = (absPath: string) =>
-  (process.env.NEXT_PUBLIC_BASE_PATH ?? "") +
-  "/content/" +
-  relative(REPO_ROOT, absPath)
-    .split("/")
-    .map(encodeURIComponent)
-    .join("/");
+  siteUrl(
+    "/content/" +
+      relative(REPO_ROOT, absPath)
+        .split("/")
+        .map(encodeURIComponent)
+        .join("/")
+  );
 
 async function buildItem(dir: string, full: string): Promise<AttachmentItem> {
-  const rel = relative(REPO_ROOT, full);
   const st = statSync(full);
   const name = relative(dir, full);
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
   const base: AttachmentItem = {
     name,
-    url: "/content/" + rel.split("/").map(encodeURIComponent).join("/"),
+    url: contentUrl(full),
     size: fmtSize(st.size),
     kind: "download",
   };
