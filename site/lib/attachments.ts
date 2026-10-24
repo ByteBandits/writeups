@@ -111,13 +111,12 @@ export const contentUrl = (absPath: string) =>
   );
 
 async function buildItem(dir: string, full: string): Promise<AttachmentItem> {
-  const rel = relative(REPO_ROOT, full);
   const st = statSync(full);
   const name = relative(dir, full);
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
   const base: AttachmentItem = {
     name,
-    url: "/content/" + rel.split("/").map(encodeURIComponent).join("/"),
+    url: contentUrl(full),
     size: fmtSize(st.size),
     kind: "download",
   };
