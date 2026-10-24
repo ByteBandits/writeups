@@ -1,8 +1,8 @@
 [](ctf=whitehat-contest-11-2016)
 [](type=rev)
-[](tool=IDApro)
+[](tools=ida)
 
-# RE3 (rev 100)
+# RE1 (rev 100)
 
 We're given the Binary. When opened and analysed with IDA and exported the C file we come across the code line below.
 

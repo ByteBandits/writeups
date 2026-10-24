@@ -1,4 +1,8 @@
-## Worst Pwn Ever (Pwn)
+[](ctf=backdoor-ctf)
+[](type=pwn)
+[](tags=python, eval, fuzzing)
+
+# Worst Pwn Ever (Pwn)
 
 We get netcat connection parameters to work with.
 After connecting to the server we get a custom command-line prompt, but typing some random things cause the connection to close.

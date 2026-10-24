@@ -1,3 +1,9 @@
+[](ctf=backdoor-ctf)
+[](type=rev)
+[](tags=gdb, ida, stripping)
+
+# Debug (rev 70)
+
 ***DEBUG32***
 
 *category:reverse engineering*  *points:70*

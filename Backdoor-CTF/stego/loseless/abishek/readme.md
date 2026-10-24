@@ -1,3 +1,9 @@
+[](ctf=backdoor-ctf)
+[](type=stego)
+[](tags=compare, png)
+
+# Loseless (stego 100)
+
 ***LOSELESS***
 
 *category:steganography*  *points:100*
