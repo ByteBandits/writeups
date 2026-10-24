@@ -1,6 +1,6 @@
 [](ctf=csaw-quals-2016)
 [](type=exploit)
-[](tags=bof)
+[](tags=buffer-overflow)
 [](tools=ROPtool)
 [](techniques=ROP)
 

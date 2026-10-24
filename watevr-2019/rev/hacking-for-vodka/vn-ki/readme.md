@@ -1,3 +1,5 @@
+[](tags=xor)
+
 # Hacking for vodka
 
 #### Category: rev

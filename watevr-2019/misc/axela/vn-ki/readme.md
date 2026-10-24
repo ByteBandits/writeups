@@ -1,3 +1,5 @@
+[](tags=discord, bot)
+
 # Axela
 
 #### Category: misc

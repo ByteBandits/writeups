@@ -1,6 +1,6 @@
 [](ctf=csaw-finals-2019)
 [](type=reverse)
-[](tags=ida,brtueforce)
+[](tags=ida,bruteforce)
 [](tools=ida)
 
 # pwn 200

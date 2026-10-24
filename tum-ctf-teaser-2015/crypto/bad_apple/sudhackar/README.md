@@ -1,7 +1,7 @@
 [](ctf=tum-ctf-teaser-2015)
 [](type=crypto)
 [](tags=hash-length-extension-attack)
-[](tool=hashpump)
+[](tools=hashpump)
 
 # bad_apple (crypto 15)
 

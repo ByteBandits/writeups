@@ -1,3 +1,5 @@
+[](tags=jsfuck, xor)
+
 # Number Lock
 
 #### Category: rev

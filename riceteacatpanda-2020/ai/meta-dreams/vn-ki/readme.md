@@ -1,3 +1,6 @@
+[](type=misc)
+[](tags=pytorch)
+
 # meta-dreams
 
 #### Category: AI

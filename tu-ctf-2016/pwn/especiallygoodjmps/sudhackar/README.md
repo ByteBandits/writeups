@@ -1,6 +1,6 @@
 [](ctf=tu-ctf-2016)
 [](type=exploit)
-[](tags=buffer overflow)
+[](tags=buffer-overflow)
 [](tools=libc-database)
 [](techniques=ret2libc)
 

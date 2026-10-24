@@ -1,6 +1,6 @@
 [](ctf=csaw-quals-2015)
 [](type=forensics)
-[](tags=)
+[](tags=strings)
 [](tools=)
 [](techniques=)
 

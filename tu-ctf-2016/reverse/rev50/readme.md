@@ -1,3 +1,7 @@
+[](tags=mips, ida, xor)
+
+# Rev 50 (rev 50)
+
 ***REV 50***
 
 *category:reverse engineering*  *points:50*

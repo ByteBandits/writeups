@@ -1,5 +1,5 @@
 [](ctf=hack.lu-2015)
-[](type=coding)
+[](type=misc)
 [](tags=random)
 
 # GuessTheNumber (coding-150)

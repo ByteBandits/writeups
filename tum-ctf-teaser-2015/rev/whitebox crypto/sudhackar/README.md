@@ -1,7 +1,7 @@
 [](ctf=tum-ctf-teaser-2015)
 [](type=rev)
 [](tags=xtea)
-[](tool=pwntools)
+[](tools=pwntools)
 
 # whitebox crypto (rev 20)
 

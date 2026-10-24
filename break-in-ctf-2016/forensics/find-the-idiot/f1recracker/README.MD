@@ -1,3 +1,5 @@
+[](tags=bruteforce, password-cracking)
+
 # Find The idiot (Score 100)
 #### Forensics, Pwning
 

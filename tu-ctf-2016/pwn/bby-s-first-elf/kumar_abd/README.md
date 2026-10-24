@@ -1,3 +1,9 @@
+[](ctf=tu-ctf-2016)
+[](type=pwn)
+[](tags=buffer-overflow, ret2win)
+
+# bby's first elf (pwn 25)
+
 **BBY'S FIRST ELF**
 
 *category*:pwn  *points*:25
@@ -5,7 +11,7 @@
 This is a basic Buffer overflow problem. The first step checking the file type, we get a 32-bit, non-stripped Binary file.
 
 ```bash
-hulkbuster@Jarvis:~/Downloads$ file 3d726802521a9ce2b24e2c3baf039915e48ad056 3d726802521a9ce2b24e2c3baf039915e48ad056: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=3fb9014d549efe4ce761146b736590eb9f7e281d, not stripped```
+hulkbuster@Jarvis:~/Downloads$ file 3d726802521a9ce2b24e2c3baf039915e48ad056 3d726802521a9ce2b24e2c3baf039915e48ad056: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=3fb9014d549efe4ce761146b736590eb9f7e281d, not stripped
 ```
 
 We first debug the binary using GDB debugger. When overflowed look for EBP and ESP to determine the stack size. We then checked for raw symbols of this object file. It is found a function "print_flag" with a memory address 0x0804856d.

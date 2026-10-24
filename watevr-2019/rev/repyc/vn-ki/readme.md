@@ -1,3 +1,5 @@
+[](tags=python, pyc)
+
 # Repyc
 
 #### Category: Rev
