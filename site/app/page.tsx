@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { HeroSearch } from "@/components/HeroSearch";
+import { siteUrl } from "@/lib/url";
 import {
   getAllWriteups,
   getAuthors,
-  getCategories,
   getCtfs,
   getTags,
   writeupUrl,
@@ -21,7 +21,6 @@ export default function Home() {
   const tags = getTags(writeups).slice(0, 6);
   const authors = getAuthors(writeups).slice(0, 5);
   const ctfs = getCtfs(writeups).slice(0, 5);
-  const categories = getCategories(writeups).map(([c]) => c);
   const recent = writeups.slice(0, 8);
 
   return (
@@ -30,7 +29,7 @@ export default function Home() {
         <div className="hero-brand">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/skull.png"}
+            src={siteUrl("/skull.png")}
             alt=""
             className="hero-skull"
           />
@@ -43,7 +42,7 @@ export default function Home() {
           · <b>{getCtfs(writeups).length}</b> ctfs ·{" "}
           <b>{getAuthors(writeups).length}</b> authors · est. 2015
         </p>
-        <HeroSearch categories={categories} />
+        <HeroSearch />
       </header>
 
       <div className="lower">

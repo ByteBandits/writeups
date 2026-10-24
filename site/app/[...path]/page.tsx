@@ -62,14 +62,15 @@ const escHtml = (s: string) =>
 function filterMetaHtml(w: Writeup): string {
   const span = (key: string, val: string) =>
     `<span class="sr-only" data-pagefind-filter="${key}">${escHtml(val)}</span>`;
-  return [
+  // ignore = drop the text from the word index/excerpts; filters inside are still collected
+  return `<div data-pagefind-ignore>${[
     span("ctf", w.ctf),
     span("category", w.category),
     span("author", w.author),
     ...w.tags.map((t) => span("tag", t)),
     ...w.tools.map((t) => span("tool", t)),
     ...w.techniques.map((t) => span("technique", t)),
-  ].join("");
+  ].join("")}</div>`;
 }
 
 export default async function WriteupPage({
@@ -113,7 +114,7 @@ export default async function WriteupPage({
   return (
     <div className={`wrap${toc.length > 1 ? "" : " no-toc"}`}>
       <main data-pagefind-body>
-        <div className="crumbs">
+        <div className="crumbs" data-pagefind-ignore>
           <Link href="/">~</Link>
           {crumbs.map((seg, i) => {
             const isLast = i === crumbs.length - 1;
@@ -137,7 +138,7 @@ export default async function WriteupPage({
           <h1 data-pagefind-meta="title" data-pagefind-weight="10">
             {w.title}
           </h1>
-          <div className="meta">
+          <div className="meta" data-pagefind-ignore>
             <span className="mchip cat">
               <Link href={`/categories/${encodeURIComponent(w.category)}/`}>
                 {w.category}
@@ -211,6 +212,10 @@ export default async function WriteupPage({
             )}
           </div>
         </div>
+        {/* searchable copy of the ignored chips/byline; last, so excerpts start with prose */}
+        <p className="sr-only">
+          {[w.author, w.ctf, w.category, ...w.tags, ...w.tools, ...w.techniques].join(" · ")}
+        </p>
       </main>
 
       {toc.length > 1 && (

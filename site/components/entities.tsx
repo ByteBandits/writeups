@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { scoreToken } from "@/lib/fuzzy";
+import { getFilters } from "./search-core";
 
 export interface Entity {
   kind: "author" | "tag" | "ctf" | "category" | "tool" | "technique";
@@ -17,42 +20,11 @@ const KIND_ORDER: Record<Entity["kind"], number> = {
   technique: 5,
 };
 
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
+/** route path for an entity — use with <Link> */
 export const entityUrl = (e: Entity) =>
   e.kind === "tool" || e.kind === "technique"
-    ? `${BASE}/search/?q=${encodeURIComponent(`${e.kind}:${e.name}`)}`
-    : `${BASE}/${{ author: "authors", tag: "tags", ctf: "ctfs", category: "categories" }[e.kind]}/${encodeURIComponent(e.name)}/`;
-
-function lev(a: string, b: string): number {
-  if (Math.abs(a.length - b.length) > 3) return 99;
-  const dp: number[] = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    let prev = dp[0];
-    dp[0] = i;
-    for (let j = 1; j <= b.length; j++) {
-      const tmp = dp[j];
-      dp[j] = Math.min(dp[j] + 1, dp[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
-      prev = tmp;
-    }
-  }
-  return dp[b.length];
-}
-
-const isSubsequence = (t: string, e: string) => {
-  let i = 0;
-  for (const ch of e) if (ch === t[i]) i++;
-  return i === t.length;
-};
-
-function scoreToken(t: string, e: string): number {
-  if (e === t) return 1.0;
-  if (e.startsWith(t)) return 0.9;
-  if (e.includes(t)) return 0.8;
-  if (lev(t, e) <= Math.max(1, Math.floor(e.length / 4))) return 0.7;
-  if (t.length >= 3 && isSubsequence(t, e)) return 0.5;
-  return 0;
-}
+    ? `/search/?q=${encodeURIComponent(`${e.kind}:${e.name}`)}`
+    : `/${{ author: "authors", tag: "tags", ctf: "ctfs", category: "categories" }[e.kind]}/${encodeURIComponent(e.name)}/`;
 
 export function matchEntities(term: string, universe: Entity[]): Entity[] {
   const tokens = term.toLowerCase().split(/\s+/).filter(Boolean);
@@ -69,25 +41,14 @@ export function matchEntities(term: string, universe: Entity[]): Entity[] {
     .map((x) => x.e);
 }
 
-// ── shared universe loading (piggybacks on search-core's pagefind) ──
-import { loadPagefind } from "./search-core";
-
 let universePromise: Promise<Entity[]> | null = null;
 
 export function loadUniverse(): Promise<Entity[]> {
-  if (!universePromise) {
-    universePromise = (async () => {
-      const pf = await loadPagefind();
-      const raw = await pf.filters();
-      const out: Entity[] = [];
-      for (const [kind, values] of Object.entries(raw ?? {})) {
-        for (const [name, count] of Object.entries(values as Record<string, number>)) {
-          out.push({ kind: kind as Entity["kind"], name, count });
-        }
-      }
-      return out;
-    })();
-  }
+  universePromise ??= getFilters().then((raw) =>
+    Object.entries(raw).flatMap(([kind, values]) =>
+      Object.entries(values).map(([name, count]) => ({ kind: kind as Entity["kind"], name, count }))
+    )
+  );
   return universePromise;
 }
 
@@ -101,9 +62,7 @@ export function EntitySuggestions({ term }: { term: string }) {
       return;
     }
     loadUniverse()
-      .then((u) => {
-        if (live) setMatches(matchEntities(term, u));
-      })
+      .then((u) => live && setMatches(matchEntities(term, u)))
       .catch(() => {});
     return () => {
       live = false;
@@ -113,13 +72,13 @@ export function EntitySuggestions({ term }: { term: string }) {
   if (!matches.length) return null;
 
   return (
-    <div className="entity-row">
+    <div className="entity-row dym">
       {matches.map((e) => (
-        <a className={`entity-chip kind-${e.kind}`} key={`${e.kind}:${e.name}`} href={entityUrl(e)}>
+        <Link className={`entity-chip kind-${e.kind}`} key={`${e.kind}:${e.name}`} href={entityUrl(e)}>
           <span className="ekind">{e.kind === "tag" ? "#" : `${e.kind}:`}</span>
           {e.name}
           <span className="ecount">{e.count}</span>
-        </a>
+        </Link>
       ))}
     </div>
   );

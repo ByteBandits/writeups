@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { TopBarSearch } from "@/components/SearchPalette";
+import { siteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
   title: { default: "ByteBandits Writeups", template: "%s — ByteBandits" },
@@ -19,7 +20,7 @@ export default function RootLayout({
           <Link href="/" className="brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={(process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/skull.png"}
+              src={siteUrl("/skull.png")}
               alt="ByteBandits"
               className="brand-logo"
             />

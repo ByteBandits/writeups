@@ -9,6 +9,7 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import { renderFilePreview, type FilePreview } from "./attachments";
+import { siteUrl } from "./url";
 
 const REPO_ROOT = resolve(process.cwd(), "..");
 const IMAGE_EXT = new Set(["png", "jpg", "jpeg", "gif", "svg", "webp"]);
@@ -76,10 +77,7 @@ function noteDead(from: string, target: string) {
 }
 
 const toUrl = (segments: string[], suffix = "") =>
-  (process.env.NEXT_PUBLIC_BASE_PATH ?? "") +
-  "/content/" +
-  segments.map(encodeURIComponent).join("/") +
-  suffix;
+  siteUrl("/content/" + segments.map(encodeURIComponent).join("/") + suffix);
 
 export interface LinkedFile {
   url: string;

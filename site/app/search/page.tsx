@@ -2,58 +2,54 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { ResultCard, usePagefind, parseQuery } from "@/components/search-core";
-import { EntitySuggestions } from "@/components/entities";
+import { ResultCard, replaceFilter, usePagefind } from "@/components/search-core";
+import { SearchBox, SearchStatus, badTokens } from "@/components/search-ui";
+
+// trailing space commits every filter token from the URL into a capsule
+const fromParam = (q: string | null) => (q?.trim() ? q.trim() + " " : "");
 
 function SearchInner() {
   const params = useSearchParams();
   const router = useRouter();
-  const [query, setQuery] = useState(params.get("q") ?? "");
+  const [query, setQuery] = useState(() => fromParam(params.get("q")));
   const [limit, setLimit] = useState(30);
-  const { results, total, status } = usePagefind(query, limit);
+  const s = usePagefind(query, limit);
 
   useEffect(() => {
-    const q = params.get("q") ?? "";
-    setQuery(q);
+    setQuery(fromParam(params.get("q")));
     setLimit(30);
   }, [params]);
 
   return (
     <div className="listwrap">
       <h1>search</h1>
-      <div className="bigsearch" style={{ marginBottom: 18 }}>
-        <span className="prompt">&gt;</span>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter")
-              router.replace(`/search/?q=${encodeURIComponent(query)}`);
-          }}
-          placeholder="search — heap, tag:z3, author:sudhackar"
-          aria-label="Search writeups"
+      <div style={{ marginBottom: 18 }}>
+        <SearchBox
+          query={query}
+          onChange={setQuery}
+          onEnter={() => router.replace(`/search/?q=${encodeURIComponent(query.trim())}`)}
+          placeholder="search writeups — heap, z3, sudhackar…"
+          bad={badTokens(s.unresolved)}
           autoFocus
         />
       </div>
       <div className="results">
-        {parseQuery(query).term && (
-          <EntitySuggestions term={parseQuery(query).term} />
-        )}
-        {status === "unavailable" && (
-          <div className="search-hint">
-            search index not built yet — run <code>npm run build</code>
-          </div>
-        )}
-        {status === "ready" && query && results.length === 0 && (
-          <div className="search-hint">no results for “{query}”</div>
-        )}
-        {results.map((r) => (
+        <SearchStatus
+          query={query}
+          status={s.status}
+          settled={s.settled}
+          total={s.total}
+          corrections={s.corrections}
+          unresolved={s.unresolved}
+          onSwap={(k, f, t) => setQuery((q) => replaceFilter(q, k, f, t))}
+        />
+        {s.results.map((r) => (
           <ResultCard key={r.url} r={r} />
         ))}
-        {total > 0 && (
+        {s.total > 0 && (
           <div className="search-hint">
-            showing {results.length} of {total}
-            {results.length < total && (
+            showing {s.results.length} of {s.total}
+            {s.results.length < s.total && (
               <>
                 {" — "}
                 <a
