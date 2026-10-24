@@ -1,7 +1,7 @@
 [](ctf=whitehat-contest-11-2016)
 [](type=rev)
 [](tags=py2exe)
-[](tool=unpy2exe)
+[](tools=unpy2exe)
 
 # RE3 (rev 100)
 

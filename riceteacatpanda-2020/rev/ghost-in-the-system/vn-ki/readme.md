@@ -1,3 +1,5 @@
+[](tags=ghidra)
+
 # Ghost in the system
 
 #### Category: rev

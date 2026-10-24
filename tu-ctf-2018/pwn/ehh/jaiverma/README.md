@@ -1,6 +1,6 @@
 [](ctf=tu-ctf-2018)
 [](type=pwn)
-[](tags=stack-canary)
+[](tags=canary)
 [](tools=radare2,gdb-peda,pwntools,python)
 
 # Ehh

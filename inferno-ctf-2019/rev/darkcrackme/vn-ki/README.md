@@ -1,3 +1,5 @@
+[](tags=crackme, ghidra)
+
 # darcrackme
 
 #### Category: rev

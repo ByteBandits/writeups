@@ -1,6 +1,6 @@
 [](ctf=mma-ctf-2016)
 [](type=crypto)
-[](tags=RSA)
+[](tags=rsa)
 [](tools=gmpy)
 [](techniques=factorisation,shreedharacharya)
 

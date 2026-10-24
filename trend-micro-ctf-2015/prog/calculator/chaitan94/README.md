@@ -1,5 +1,5 @@
 [](ctf=trend-micro-ctf-2015)
-[](type=prog)
+[](type=misc)
 [](tags=roman,parsing)
 [](tools=)
 [](techniques=)

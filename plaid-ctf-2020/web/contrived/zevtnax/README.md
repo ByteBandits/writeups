@@ -1,3 +1,5 @@
+[](tags=ssrf)
+
 # [Web] Contrived Web Problem - 350
 *Warning*: This writeup is a creation of my lonely quarantined mind. It may be longer than required. If you're busy, jump to [the Attack Plan](#The-Attack-Plan).
 

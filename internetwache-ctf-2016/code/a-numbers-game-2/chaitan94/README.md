@@ -1,5 +1,5 @@
 [](ctf=internetwasche-ctf-2016)
-[](type=code)
+[](type=misc)
 [](tags=bot,crypto,math)
 [](tools=sympy)
 [](techniques=)

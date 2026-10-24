@@ -1,3 +1,5 @@
+[](tags=wasm)
+
 # Web Crackme
 
 #### Category: rev

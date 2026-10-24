@@ -1,3 +1,5 @@
+[](tags=jsfuck)
+
 # fuckn't
 
 

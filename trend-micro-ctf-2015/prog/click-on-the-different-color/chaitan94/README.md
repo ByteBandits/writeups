@@ -1,6 +1,6 @@
 [](ctf=trend-micro-ctf-2015)
-[](type=prog)
-[](tags=)
+[](type=misc)
+[](tags=bot)
 [](tools=PIL)
 [](techniques=)
 

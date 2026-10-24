@@ -1,5 +1,5 @@
 [](ctf=b01lers-ctf-2020)
-[](type=pwm)
+[](type=pwn)
 [](tags=buffer-overflow,rop)
 [](tools=ropgadget,gdb,python)
 

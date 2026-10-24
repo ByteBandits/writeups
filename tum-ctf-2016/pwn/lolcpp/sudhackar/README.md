@@ -1,6 +1,6 @@
 [](ctf=tum-ctf-2016)
 [](type=exploit)
-[](tags=bof)
+[](tags=buffer-overflow)
 [](tools=pwntools)
 [](techniques=)
 

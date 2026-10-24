@@ -1,7 +1,7 @@
 [](ctf=b01lers-ctf-2020)
 [](type=reversing)
 [](tags=game,re,godot)
-[](toosl=ghidra)
+[](tools=ghidra)
 
 # dank engine
 

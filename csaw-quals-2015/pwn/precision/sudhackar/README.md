@@ -1,6 +1,6 @@
 [](ctf=csaw-quals-2015)
 [](type=pwn)
-[](tags=stack-cookie,buffer-overflow)
+[](tags=canary,buffer-overflow)
 
 We are given a [file](../precision_a8f6f0590c177948fe06c76a1831e650)
 
