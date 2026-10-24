@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type { LinkedFile } from "@/lib/markdown";
+import { COPY_LABEL, copyFile, flashCopied } from "@/lib/clipboard";
 
 const KIND_LABEL: Record<string, string> = {
   text: "source",
@@ -23,6 +24,7 @@ export function ContentEnhancer({
     // copy buttons on code blocks
     const pres = root.querySelectorAll<HTMLElement>("pre");
     pres.forEach((pre) => {
+      if (pre.closest(".fileembed")) return;
       const host = (pre.closest("figure") ?? pre) as HTMLElement;
       host.style.position = "relative";
       const btn = document.createElement("button");
@@ -39,6 +41,11 @@ export function ContentEnhancer({
 
     // click-to-expand for inline file links
     const onClick = (e: MouseEvent) => {
+      const copyBtn = (e.target as HTMLElement).closest?.("button.av-copy[data-copy]") as HTMLElement | null;
+      if (copyBtn) {
+        copyFile(copyBtn.dataset.copy!).then((ok) => flashCopied(copyBtn, ok));
+        return;
+      }
       const link = (e.target as HTMLElement).closest?.(
         "a.filelink[data-file]"
       ) as HTMLAnchorElement | null;
@@ -70,6 +77,7 @@ export function ContentEnhancer({
         <div class="attachview-head">
           <span class="av-name">${file.name}</span>
           <span class="av-kind">${KIND_LABEL[file.kind] ?? file.kind}</span>
+          ${file.kind === "text" ? `<button type="button" class="av-copy" data-copy="${url}">${COPY_LABEL}</button>` : ""}
           <a class="av-dl" href="${url}" download>⬇ download</a>
         </div>
         ${body}`;

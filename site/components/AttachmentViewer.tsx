@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AttachmentItem } from "@/lib/attachments";
+import { COPY_LABEL, copyFile, flashCopied } from "@/lib/clipboard";
 
 export function AttachmentViewer({ items }: { items: AttachmentItem[] }) {
   const [open, setOpen] = useState<string | null>(null);
@@ -39,6 +40,18 @@ export function AttachmentViewer({ items }: { items: AttachmentItem[] }) {
                   ? "binary — first 256 bytes"
                   : current.kind}
             </span>
+            {current.kind === "text" && (
+              <button
+                type="button"
+                className="av-copy"
+                onClick={(e) => {
+                  const btn = e.currentTarget;
+                  copyFile(current.url).then((ok) => flashCopied(btn, ok));
+                }}
+              >
+                {COPY_LABEL}
+              </button>
+            )}
             <a className="av-dl" href={current.url} download>
               ⬇ download ({current.size})
             </a>

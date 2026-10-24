@@ -10,6 +10,7 @@ import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import { renderFilePreview, type FilePreview } from "./attachments";
 import { siteUrl } from "./url";
+import { COPY_LABEL } from "./clipboard";
 
 const REPO_ROOT = resolve(process.cwd(), "..");
 const IMAGE_EXT = new Set(["png", "jpg", "jpeg", "gif", "svg", "webp"]);
@@ -202,6 +203,16 @@ function rehypeAssets(relDir: string, linkedFiles: Map<string, LinkedFile>) {
           properties: { className: ["fileembed-head"] },
           children: [
             { type: "text", value: preview.name },
+            ...(preview.kind === "text"
+              ? [
+                  {
+                    type: "element",
+                    tagName: "button",
+                    properties: { type: "button", className: ["av-copy"], dataCopy: url },
+                    children: [{ type: "text", value: COPY_LABEL }],
+                  },
+                ]
+              : []),
             {
               type: "element",
               tagName: "a",

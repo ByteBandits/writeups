@@ -307,6 +307,12 @@ pre:hover .copybtn, figure:hover .copybtn { opacity: 1; }
   border: 1px solid var(--border); border-radius: 4px; padding: 1px 10px;
 }
 .attachview-head .av-dl:hover { color: var(--green); border-color: var(--green-dim); text-decoration: none; }
+.av-copy {
+  margin-left: auto; background: none; cursor: pointer; font: inherit; font-size: 12px; font-weight: 400; color: var(--dim);
+  border: 1px solid var(--border); border-radius: 4px; padding: 1px 10px;
+}
+.av-copy:hover { color: var(--green); border-color: var(--green-dim); }
+.av-copy + .av-dl { margin-left: 0; }
 .av-body { max-height: 480px; overflow: auto; }
 /* the viewer is not prose — let the code canvas fill its full width */
 .av-body.content { max-width: none; }
